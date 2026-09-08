@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: NotificationService
+  profiles:
+    active: mysqlDB1
+  mail:
+    host : smtp.gmail.com
+    port : 587
+    username : pandey.amitkr0501@gmail.com
+    password : kydk yrvh pinm ljyu
+    properties:
+      mail:
+        smtp:
+          auth : true
+          starttls:
+            enable : true
+sender-email : pandey.amitkr0501@gmail.com
+sender-email-password : kydk yrvh pinm ljyu
+server:
+  port : 8090

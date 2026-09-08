@@ -1,0 +1,46 @@
+ //Hibernate is java frameworks that enable us to minimize the database operation
+        //by mapping java objects to a database table.
+        //It streamlines the data retrieval and updates with the help of HQL.
+        //Hibernate provides caching, automatic transaction management that helps to
+        //optimize the database interaction.
+        /*ORM Tool
+        An ORM tool simplifies data creation, data manipulation and data access and
+        It is a programming technique that maps the object to the data stored in the database.*/
+        /*Since ORM (Object-Relational Mapping) tools like Hibernate ultimately rely on JDBC (Java Database Connectivity) to interact with the database, you might wonder why we need ORM at all. Here's why ORM tools are useful:
+
+        1. Abstraction & Simplicity
+        JDBC requires writing SQL queries manually, handling connections, managing transactions, and mapping result sets to Java objects.
+
+        Hibernate removes most of that boilerplate code by letting developers work with objects instead of SQL.
+
+        2. Automatic Mapping
+        JDBC requires manual mapping of database tables to Java objects.
+
+        Hibernate automatically maps Java objects to database tables, reducing errors and improving maintainability.
+
+        3. Caching & Performance Optimization
+        JDBC executes queries directly, causing repeated database access.
+
+                Hibernate caches queries (first and second-level caching), reducing redundant calls and improving performance.
+
+        4. Database Independence
+        JDBC queries are database-specific, meaning switching databases requires rewriting queries.
+
+                Hibernate handles dialects internally, so changing databases is much easier.
+
+        5. Transaction Management
+        In JDBC, developers must manually handle transactions (commit, rollback).
+
+        Hibernate provides automatic transaction management with minimal configuration.
+
+        6. HQL (Hibernate Query Language)
+        Instead of complex SQL, Hibernate allows querying using HQL, which is object-oriented and more readable.*/
+        /*What is JPA?
+        Java Persistence API (JPA) is a Java specification that provides specific functionality and is a standard for ORM tools.
+        javax.persistence package contains the JPA classes and interfaces.*/
+
+        /*Hibernate is a framework which provides some abstraction layer, meaning that the programmer does not have to worry about the implementations;
+        Hibernate does the implementations for you internally like Establishing a connection with the database, writing query to perform CRUD operations etc.*/
+        /*Hibernate provides Caching memory, auto ddl-command, auto primary key generation.
+        *It has HQL(Hibernate Query Language) so we don't need to depend on any database we just need to change the dialect.
+        *No to handle exceptions manually.*/

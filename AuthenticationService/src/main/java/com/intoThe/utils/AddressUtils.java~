@@ -1,0 +1,16 @@
+package com.intoThe.hibernate.utils;
+
+import com.intoThe.hibernate.entities.Address;
+import com.intoThe.hibernate.repository.AddressRepository;
+import org.springframework.stereotype.Component;
+
+import java.util.NoSuchElementException;
+
+@Component
+public class AddressUtils {
+    public static Address isAddressExist(Long addressId, AddressRepository addressRepository){
+        return addressRepository.findById(addressId)
+                .orElseThrow(() -> new NoSuchElementException("Address Not Found"));
+
+    }
+}
