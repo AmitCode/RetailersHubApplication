@@ -1,18 +1,9 @@
-package com.example;
+package com.intoThe;
 
 
-import com.intoThe.entities.Users;
-import com.intoThe.mapper.UserDataModelMapper;
-import com.intoThe.repository.UserRepository;
-import com.intoThe.service.UserService;
-import com.intoThe.service.impl.UserServiceImpl;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
-import static org.mockito.Mockito.*;
 
 
 @SpringBootTest(classes = UserServiceTestClass.class)

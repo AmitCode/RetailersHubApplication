@@ -370,7 +370,7 @@ public ResponseEntity<?> addUser(UserRegistrationRequest registrationRequest) {
             Optional<EntityVerificationToken> tokenOptional = tokenRepository.findByVerificationToken(
                     passwordResetRequest.getToken()
             );
-            if(tokenOptional.isEmpty())
+            if(!tokenOptional.isPresent())
                 throw new InvalidToken("Invalid verification token!...");
 
             EntityVerificationToken verificationTokenInfo = tokenOptional.get();

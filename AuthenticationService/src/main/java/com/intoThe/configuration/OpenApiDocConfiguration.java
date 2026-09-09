@@ -13,11 +13,10 @@ import org.springframework.context.annotation.Configuration;
                 title = "Authentication Service API",
                 version = "AuthDev1.0",
                 summary = "Authentication, initial user, and role management APIs",
-                description = """
-                Provides REST APIs for user authentication, initial user registration and profile management,
-                and role management. The service supports user authentication, JWT access token generation
-                and refresh, and authentication-protected operations requiring a valid JWT Bearer token.
-                """
+                description = "Provides REST APIs for user authentication, initial user registration and " +
+                        "profile management,and role management. The service supports user authentication, " +
+                        "JWT access token generation and refresh, and authentication-protected operations requiring a " +
+                        "valid JWT Bearer token. "
         ),
         servers = @Server(
 //                url = "https://{environment}.example.com/authService",
