@@ -11,6 +11,7 @@
 	<groupId>com.theMainApplication</groupId>
 	<artifactId>UserService</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
 	<name/>
 	<description/>
 	<url/>
@@ -97,6 +98,12 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
+                    <image>
+                        <!--for hardcoded value-->
+                        <name>amitcodedocker/userservice:userdev1</name>
+                        <!--for dynamic value-->
+<!--                        <name>amitcodedocker/${project.artifactId}:userdev1</name>-->
+                    </image>
 					<excludes>
 						<exclude>
 							<groupId>org.projectlombok</groupId>
