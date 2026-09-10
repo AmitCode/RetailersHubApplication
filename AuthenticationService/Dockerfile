@@ -7,5 +7,5 @@ MAINTAINER RetailersHubApplication.com
 #Add the application jar to the image
 COPY target/AuthenticationService-0.0.1-SNAPSHOT.jar AuthenticationService-0.0.1-SNAPSHOT.jar
 
-#Exceute the application.
+#Exceute the Application.
 ENTRYPOINT ["java", "-jar", "AuthenticationService-0.0.1-SNAPSHOT.jar"]
