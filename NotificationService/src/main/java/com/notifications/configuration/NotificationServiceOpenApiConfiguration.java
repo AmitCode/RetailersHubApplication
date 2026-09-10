@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 @OpenAPIDefinition(
         info = @Info(
                 title = "Notification Service API",
-                version = "1.0",
+                version = "NotS1.0",
                 summary = "APIs for email, OTP, and notification delivery",
                 description = "Provides REST APIs for delivering application notifications. The service currently " +
                         "supports email-based OTP delivery and  verification-link emails, with support for " +
