@@ -1,0 +1,41 @@
+services:
+  authenticationservice:
+    image: "amitcodedocker/authenticaionservice:authv1"
+    container_name: authentication-ms
+    ports:
+      - "8080:8080"
+      - "8081:8080"
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    networks:
+      - retailershub
+  userservice:
+    image: "amitcodedocker/userservice:userdev1"
+    container_name: user-ms
+    ports:
+      - "8085:8085"
+      - "8086:8085"
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    networks:
+      - retailershub
+  notificationservice:
+    image: "amitcodedocker/notificationservice:NotS1"
+    container_name: notification-ms
+    ports:
+      - "8088:8088"
+      - "8089:8088"
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    networks:
+      - retailershub
+
+networks:
+  retailershub:
+    driver: "bridge"
