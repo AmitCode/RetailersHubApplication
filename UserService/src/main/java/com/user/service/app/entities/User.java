@@ -5,10 +5,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -17,7 +14,7 @@ import java.util.List;
 @Setter
 @Getter
 @Schema(hidden = true)
-public class User extends BaseAuditEntity{
+public class User extends BaseAuditEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
@@ -35,17 +32,18 @@ public class User extends BaseAuditEntity{
     private Boolean isEmailVerified;
     private String password;
     private String confirmPassword;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userInfo",fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userInfo", fetch = FetchType.EAGER)
     private List<UserAddress> addresses;
 
     public User() {
         this(true, true, false);
     }
+
     public User(Boolean isUserActive) {
         this.isUserActive = isUserActive;
     }
 
-    public User(Boolean isUserActive, Boolean isEmailVerified, Boolean isMobileVerified){
+    public User(Boolean isUserActive, Boolean isEmailVerified, Boolean isMobileVerified) {
         this.isUserActive = isUserActive;
         this.isMobileVerified = isMobileVerified;
         this.isEmailVerified = isEmailVerified;

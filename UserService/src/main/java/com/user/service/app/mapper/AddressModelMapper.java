@@ -13,7 +13,7 @@ public class AddressModelMapper {
      * @param address The Address object to be mapped.
      * @return The mapped AddressDTO object.
      */
-    public static UserAddressDto mapToAddressDTO(UserAddress address){
+    public static UserAddressDto mapToAddressDTO(UserAddress address) {
         UserAddressDto addressDTO = new UserAddressDto();
         addressDTO.setAddressId(address.getAddressId());
         addressDTO.setAddressType(address.getAddressType());
@@ -34,7 +34,7 @@ public class AddressModelMapper {
      * @param addressDTO The AddressDTO object to be mapped.
      * @return The mapped Address object.
      */
-    public static UserAddress mapToAddress(UserAddressDto addressDTO){
+    public static UserAddress mapToAddress(UserAddressDto addressDTO) {
         UserAddress address = new UserAddress();
         address.setAddressId(addressDTO.getAddressId());
         address.setAddressType(addressDTO.getAddressType());
@@ -56,9 +56,9 @@ public class AddressModelMapper {
      * @param addressList The List of Address objects to be mapped.
      * @return The ArrayList of AddressDTO objects resulting from the mapping.
      */
-    public ArrayList<UserAddressDto> mapToAddressDTOList(List<UserAddress> addressList){
+    public ArrayList<UserAddressDto> mapToAddressDTOList(List<UserAddress> addressList) {
         ArrayList<UserAddressDto> addressDTOList = new ArrayList<>();
-        for(UserAddress address : addressList){
+        for (UserAddress address : addressList) {
             addressDTOList.add(mapToAddressDTO(address));
         }
         return addressDTOList;

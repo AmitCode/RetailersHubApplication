@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 public class UserModelMapper {
 
-    public static User mapToUserV1(UserCreationRequest request){
+    public static User mapToUserV1(UserCreationRequest request) {
 
         User users = new User();
         users.setAuthUserId(request.getAuthUserId());
@@ -29,7 +29,7 @@ public class UserModelMapper {
      * @param userDTO The {@link UserDto} object to be mapped.
      * @return The mapped {@link User} entity object.
      */
-    public static User mapToUser(UserDto userDTO){
+    public static User mapToUser(UserDto userDTO) {
 
         User users = getUser(userDTO);
         System.out.println(users.getIsEmailVerified() + "," + users.getIsMobileVerified());
@@ -66,7 +66,7 @@ public class UserModelMapper {
      * @param users The {@link User} entity object to be mapped.
      * @return The mapped {@link UserDto} object.
      */
-    public static UserDto mapToUserDTO(User users){
+    public static UserDto mapToUserDTO(User users) {
 
         UserDto userDTO = new UserDto();
         userDTO.setUserId(users.getUserId());
@@ -100,9 +100,9 @@ public class UserModelMapper {
      * @param users The list of {@link User} entity objects to be mapped.
      * @return The mapped list of {@link UserDto} objects.
      */
-    public ArrayList<UserDto> mapToListOfUserDTO(List<User> users){
+    public ArrayList<UserDto> mapToListOfUserDTO(List<User> users) {
         ArrayList<UserDto> userDTOS = new ArrayList<>();
-        for (User user : users){
+        for (User user : users) {
             userDTOS.add(mapToUserDTO(user));
         }
         return userDTOS;

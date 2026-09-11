@@ -7,7 +7,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 public class WebClientService {
     public static ResponseEntity<EmailServiceResponse> callNotificationServiceEmail(EmailRequest request,
-                                                                                    WebClient client){
+                                                                                    WebClient client) {
         return client.post()
                 .uri("email/sendMail")
                 .bodyValue(request)

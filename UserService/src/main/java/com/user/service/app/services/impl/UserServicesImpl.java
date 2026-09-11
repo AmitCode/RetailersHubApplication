@@ -28,15 +28,16 @@ public class UserServicesImpl implements UserService {
     private final UserRepository userRepository;
     private final WebClient webClient;
     private UserServiceOprResponse response;
-    UserServicesImpl(UserRepository userRepository, WebClient webClient){
+
+    UserServicesImpl(UserRepository userRepository, WebClient webClient) {
         this.userRepository = userRepository;
         this.webClient = webClient;
     }
 
-    public List<UserDto> getAllUsers(){
+    public List<UserDto> getAllUsers() {
         List<User> users = userRepository.findAll();
         List<UserDto> userDtos = new ArrayList<>();
-        for(User user : users){
+        for (User user : users) {
             userDtos.add(UserModelMapper.mapToUserDTO(user));
         }
         return userDtos;
@@ -44,9 +45,9 @@ public class UserServicesImpl implements UserService {
 
     @Override
     @Transactional
-    public UserServiceOprResponse addNewUserV1(UserCreationRequest request){
-        try{
-            if(UserServiceUtils.isEmailExist(request.getUserEmail(), userRepository))
+    public UserServiceOprResponse addNewUserV1(UserCreationRequest request) {
+        try {
+            if (UserServiceUtils.isEmailExist(request.getUserEmail(), userRepository))
                 throw new EmailIdAlreadyExist("User already exist with email id!...");
             User user = UserModelMapper.mapToUserV1(request);
             User newUser = userRepository.save(user);
@@ -74,7 +75,7 @@ public class UserServicesImpl implements UserService {
                     .setStatusCode(HttpStatus.CREATED.toString())
                     .setIsOprSuccess(true)
                     .setResponseMsg("User has been added successfully!.");
-        }catch (DataIntegrityViolationException exception){
+        } catch (DataIntegrityViolationException exception) {
             throw new UserNameAlreadyExist("User already exists!...");
         }
 
@@ -92,7 +93,7 @@ public class UserServicesImpl implements UserService {
 
     @Override
     @Transactional
-    public UserServiceOprResponse addNewUserV2(UserDto userDto){
+    public UserServiceOprResponse addNewUserV2(UserDto userDto) {
 //        Optional<User> userOptional = repository.findByUserName(userDto.getUserName());
 //        if(userOptional.isPresent())
 //            throw new UserNameAlreadyExist("User already exists!...");
@@ -102,15 +103,15 @@ public class UserServicesImpl implements UserService {
 //        response.setStatusCode(HttpStatus.CREATED.toString())
 //                .setIsOprSuccess(true)
 //                .setResponseMsg("User has been added successfully with id : "+ user.getUserId() +"!...");
-        try{
+        try {
             User user = UserModelMapper.mapToUser(userDto);
             User newUser = userRepository.save(user);
 
             response = UserServiceOprResponse.createResponse()
                     .setStatusCode(HttpStatus.CREATED.toString())
                     .setIsOprSuccess(true)
-                    .setResponseMsg("User has been added successfully with id : "+ user.getUserId() +"!...");
-        }catch (DataIntegrityViolationException exception){
+                    .setResponseMsg("User has been added successfully with id : " + user.getUserId() + "!...");
+        } catch (DataIntegrityViolationException exception) {
             throw new UserNameAlreadyExist("User already exists!...");
         }
         return response;
@@ -118,11 +119,11 @@ public class UserServicesImpl implements UserService {
 
     @Override
     @Transactional
-    public UserServiceOprResponse updateUserDetails(UserDto userDto){
+    public UserServiceOprResponse updateUserDetails(UserDto userDto) {
 
         try {
             Optional<User> userOptional = userRepository.findByUserName(userDto.getUserName());
-            if(userOptional.isEmpty())
+            if (userOptional.isEmpty())
                 throw new ResourceNotFound("User not found!.");
 
             User userToBeUpdated = UserModelMapper.mapToUser(userDto);
@@ -134,7 +135,7 @@ public class UserServicesImpl implements UserService {
                     .setStatusCode(HttpStatus.ACCEPTED.toString())
                     .setIsOprSuccess(true);
 
-        }catch (RuntimeException exception){
+        } catch (RuntimeException exception) {
             throw new UserServiceException("Internal Server Error !-> " + exception.getMessage());
         }
         return response;
@@ -142,16 +143,16 @@ public class UserServicesImpl implements UserService {
 
     @Override
     @Transactional
-    public ResponseEntity<UserServiceOprResponse> deleteUserByUserName(String userName){
-        try{
-            if(UserServiceUtils.isUserExist(userName, userRepository)){
+    public ResponseEntity<UserServiceOprResponse> deleteUserByUserName(String userName) {
+        try {
+            if (UserServiceUtils.isUserExist(userName, userRepository)) {
                 userRepository.deleteByUserName(userName);
             }
             response = UserServiceOprResponse.createResponse()
                     .setResponseMsg("User has been deleted successfully!..")
                     .setStatusCode(HttpStatus.ACCEPTED.toString())
                     .setIsOprSuccess(true);
-        }catch (RuntimeException runtimeException){
+        } catch (RuntimeException runtimeException) {
             throw new UserServiceException(runtimeException.getMessage());
         }
         return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
@@ -161,7 +162,7 @@ public class UserServicesImpl implements UserService {
     @Transactional
     public ResponseEntity<UserServiceOprResponse> activateOrDeactivate(String userName, Boolean isActive) {
         Optional<User> users = userRepository.findByUserName(userName);
-        if(users.isPresent()){
+        if (users.isPresent()) {
             User user = users.get();
             user.setIsUserActive(isActive);
             userRepository.deleteByUserName(userName);
@@ -170,26 +171,26 @@ public class UserServicesImpl implements UserService {
                     .setResponseMsg((isActive) ? "User has been deleted successfully!..."
                             : "User has been Deactivated!...")
                     .setIsOprSuccess(true);
-        }else {
+        } else {
             throw new ResourceNotFound("User does not exists!...");
         }
 
-        return new ResponseEntity<> (response, HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
     }
 
-    public ResponseEntity<UserServiceOprResponse> updateUserProfile(Long userId, UserDto userDetails){
+    public ResponseEntity<UserServiceOprResponse> updateUserProfile(Long userId, UserDto userDetails) {
         try {
             Optional<User> userOptional = UserServiceUtils.getUserDetailsWithId(userId, userRepository);
-            if(userOptional.isEmpty())
+            if (userOptional.isEmpty())
                 throw new ResourceNotFound("User not found!...");
 
             User user = UserModelMapper.mapToUser(userOptional.get(), userDetails);
             userRepository.save(user);
-            response  = UserServiceOprResponse.createResponse()
+            response = UserServiceOprResponse.createResponse()
                     .setResponseMsg("Updated Successfully")
                     .setStatusCode(HttpStatus.ACCEPTED.toString())
                     .setIsOprSuccess(true);
-        }catch (Exception exception){
+        } catch (Exception exception) {
             throw new UserServiceException(exception.getMessage());
         }
         return new ResponseEntity<>(response, HttpStatus.OK);

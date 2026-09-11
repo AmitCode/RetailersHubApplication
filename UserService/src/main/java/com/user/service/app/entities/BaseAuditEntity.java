@@ -25,7 +25,7 @@ public abstract class BaseAuditEntity {
     @CreatedDate
     @Column(updatable = false, nullable = false)
     private LocalDateTime createdAt;
-    
+
     @Column(updatable = false)
     private String createdBy;
 

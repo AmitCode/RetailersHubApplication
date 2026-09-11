@@ -2,11 +2,9 @@ package com.user.service.app.entities;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
-import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "MAIN_APP_ADDRESS_TABLE")
@@ -14,7 +12,7 @@ import java.time.LocalDateTime;
 @Setter
 @Getter
 @Schema(hidden = true)
-public class UserAddress extends BaseAuditEntity{
+public class UserAddress extends BaseAuditEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long addressId;

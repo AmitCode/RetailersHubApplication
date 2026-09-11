@@ -1,6 +1,5 @@
 package com.user.service.app.dtos;
 
-import com.user.service.app.entities.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;

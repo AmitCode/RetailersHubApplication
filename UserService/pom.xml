@@ -94,24 +94,39 @@
 
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-                    <image>
+<!--			<plugin>-->
+<!--				<groupId>org.springframework.boot</groupId>-->
+<!--				<artifactId>spring-boot-maven-plugin</artifactId>-->
+<!--				<configuration>-->
+<!--                    <image>-->
+<!--                        &lt;!&ndash;for hardcoded value&ndash;&gt;-->
+<!--                        <name>amitcodedocker/userservice:userdev1</name>-->
+<!--                        &lt;!&ndash;for dynamic value&ndash;&gt;-->
+<!--&lt;!&ndash;                        <name>amitcodedocker/${project.artifactId}:userdev1</name>&ndash;&gt;-->
+<!--                    </image>-->
+<!--					<excludes>-->
+<!--						<exclude>-->
+<!--							<groupId>org.projectlombok</groupId>-->
+<!--							<artifactId>lombok</artifactId>-->
+<!--						</exclude>-->
+<!--					</excludes>-->
+<!--				</configuration>-->
+<!--			</plugin>-->
+
+            <!--Plugin for google jin (To generate docker image.)-->
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>3.5.2</version>
+                <configuration>
+                    <to>
                         <!--for hardcoded value-->
-                        <name>amitcodedocker/userservice:userdev1</name>
+                        <image>amitcodedocker/userservice:userdevsv2</image>
                         <!--for dynamic value-->
-<!--                        <name>amitcodedocker/${project.artifactId}:userdev1</name>-->
-                    </image>
-					<excludes>
-						<exclude>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</exclude>
-					</excludes>
-				</configuration>
-			</plugin>
+                        <!--                    <image>amitcodedocker/${project.artifactId}:userdev1</image>-->
+                    </to>
+                </configuration>
+            </plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
