@@ -15,8 +15,8 @@ services:
     image: "amitcodedocker/userservice:userdev1"
     container_name: user-ms
     ports:
-      - "8085:8085"
-      - "8086:8085"
+      - "8082:8082"
+      - "8083:8082"
     deploy:
       resources:
         limits:
