@@ -16,7 +16,8 @@ spring:
           timeout: 5
           clone-on-start: true
           force-pull: true
-
+#encrypt:
+#  key: "mJjadcJjvVSD7S8U+rinek8X72WU6O3CZ4jeJAfWi8s="
 server:
   port: 8092
 

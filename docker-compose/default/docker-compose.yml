@@ -1,0 +1,70 @@
+services:
+  authenticationservice:
+    image: "amitcodedocker/authenticaionservice:authv2"
+    container_name: authentication-ms
+    ports:
+      - "8080:8080"
+      - "8081:8080"
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    networks:
+      - retailershub
+    environment:
+      SPRING_APPLICATION_NAME: "auth-application"
+      SPRING_CONFIG_IMPORT: "configserver:http://configserver:8092/"
+      SPRING_PROFILES_ACTIVE: default
+
+  userservice:
+    image: "amitcodedocker/userservice:userdev2"
+    container_name: user-ms
+    ports:
+      - "8082:8082"
+      - "8083:8082"
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    networks:
+      - retailershub
+    environment:
+      SPRING_APPLICATION_NAME: "userservice-application"
+      SPRING_CONFIG_IMPORT: "configserver:http://configserver:8092/"
+      SPRING_PROFILES_ACTIVE: default
+
+  notificationservice:
+    image: "amitcodedocker/notificationservice:NotS2"
+    container_name: notification-ms
+    ports:
+      - "8088:8088"
+      - "8089:8088"
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    networks:
+      - retailershub
+    environment:
+      SPRING_APPLICATION_NAME: "notification-application"
+      SPRING_CONFIG_IMPORT: "configserver:http://configserver:8092/"
+      SPRING_PROFILES_ACTIVE: default
+
+  configserver:
+    image: "amitcodedocker/configserver:configv1"
+    container_name: authentication-ms
+    ports:
+      - "8092:8092"
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    networks:
+      - retailershub
+    environment:
+      SPRING_APPLICATION_NAME: "configserver"
+      SPRING_CONFIG_IMPORT: "configserver:http://configserver:8092/"
+      SPRING_PROFILES_ACTIVE: default
+networks:
+  retailershub:
+    driver: "bridge"
