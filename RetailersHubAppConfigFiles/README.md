@@ -1,0 +1,1 @@
+This is a repo to store all the properties files of retailers hub application.
