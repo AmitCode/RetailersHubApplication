@@ -3,13 +3,42 @@ spring:
     name: RetailersHubConfigServer
 
   profiles:
-    active: native
+    active: git
 
   cloud:
     config:
       server:
-        native:
-          search-location: classpath:/config
+        git:
+          uri: "https://github.com/AmitCode/RetailersHubApplication.git"
+          default-label: feature/spring-cloud-config
+          search-paths:
+            - RetailersHubAppConfigFiles
+          timeout: 5
+          clone-on-start: true
+          force-pull: true
 
 server:
   port: 8092
+
+#spring:
+#  application:
+#    name: RetailersHubConfigServer
+#
+#  profiles:
+#    active: git
+##    active: native
+#
+#  cloud:
+#    config:
+#      server:
+##        native:
+##          search-location: classpath:/config
+#      git:
+#        uri: "https://github.com/AmitCode/RetailersHubApplication/tree/feature/spring-cloud-config/RetailersHubAppConfigFiles.git"
+#        default-label: main
+#        timeout: 5
+#        clone-on-start: true
+#        force-pull: true
+#
+#server:
+#  port: 8092
