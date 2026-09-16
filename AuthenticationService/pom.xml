@@ -30,6 +30,8 @@
     <properties>
         <java.version>24</java.version>
         <org.mapstruct.version>1.6.3</org.mapstruct.version>
+        <!--        Spring Cloud Client dependency for config management using spring cloud.-->
+        <spring-cloud.version>2025.0.0</spring-cloud.version>
     </properties>
 	<dependencies>
 		<dependency>
@@ -40,6 +42,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+        <!--Spring Cloud Client dependency for config management using spring cloud.-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-config</artifactId>
+        </dependency>
 
 		<dependency>
 			<groupId>org.mapstruct</groupId>
@@ -146,6 +153,19 @@
         </dependency>
 
     </dependencies>
+
+    <!--Spring Cloud Client dependency for config management using spring cloud.-->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
 	<build>
         <plugins>
