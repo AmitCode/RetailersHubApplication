@@ -20,6 +20,21 @@ spring:
 #  key: "mJjadcJjvVSD7S8U+rinek8X72WU6O3CZ4jeJAfWi8s="
 server:
   port: 8092
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  health:
+    readiness-state:
+      enable: true
+    liveness-state:
+      enable: true
+    endpoint:
+      health:
+        probes:
+          enable: true
+
 
 #spring:
 #  application:

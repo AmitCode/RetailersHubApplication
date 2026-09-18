@@ -182,7 +182,7 @@
                 <configuration>
                     <to>
                         <!--for hardcoded value-->
-                        <image>amitcodedocker/notificationservice:nsdevv1</image>
+                        <image>amitcodedocker/notificationservice:nsdevv2</image>
                         <!--for dynamic value-->
 <!--                    <image>amitcodedocker/${project.artifactId}:userdev1</image>-->
                     </to>

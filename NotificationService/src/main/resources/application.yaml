@@ -1,9 +1,10 @@
 spring:
   application:
     name: notification-application
-
   profiles:
     active: mysqlDB1
-
-  config:
-    import: "configserver:http://localhost:8092/"
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: "*"

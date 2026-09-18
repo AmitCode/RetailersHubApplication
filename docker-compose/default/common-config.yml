@@ -1,0 +1,16 @@
+#services:
+#  network-deploy-service:
+#    networks:
+#      - retailershub
+#    microservice-base-config:
+#      extends:
+#        service: network-deploy-service
+#      deploy:
+#        resources:
+#          limits:
+#            memory: 700m
+#      environment:
+#        SPRING_PROFILES_ACTIVE: default
+#  microservice-configserver-config:
+#    extends:
+#      service: network-deploy-service

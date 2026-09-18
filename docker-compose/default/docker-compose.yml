@@ -1,70 +1,106 @@
 services:
+
+  configserver:
+    image: "amitcodedocker/configservice:configsv1"
+    container_name: configserver
+    ports:
+      - "8092:8092"
+
+    networks:
+      - retailershub
+
+    environment:
+      SPRING_APPLICATION_NAME: "configserver"
+      SPRING_PROFILES_ACTIVE: "default"
+
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "-qO-",
+          "http://localhost:8092/actuator/health/readiness"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+
   authenticationservice:
-    image: "amitcodedocker/authenticaionservice:authv2"
+    image: "amitcodedocker/authenticationservice:authsv2"
     container_name: authentication-ms
     ports:
-      - "8080:8080"
-      - "8081:8080"
+      - "8089:8089"
+
+    depends_on:
+      configserver:
+        condition: service_healthy
+
     deploy:
       resources:
         limits:
           memory: 700m
+
     networks:
       - retailershub
+
     environment:
       SPRING_APPLICATION_NAME: "auth-application"
       SPRING_CONFIG_IMPORT: "configserver:http://configserver:8092/"
-      SPRING_PROFILES_ACTIVE: default
+      SPRING_PROFILES_ACTIVE: "default"
+
 
   userservice:
-    image: "amitcodedocker/userservice:userdev2"
+    image: "amitcodedocker/userservice:userdevsv2"
     container_name: user-ms
     ports:
       - "8082:8082"
       - "8083:8082"
+
+    depends_on:
+      configserver:
+        condition: service_healthy
+
     deploy:
       resources:
         limits:
           memory: 700m
+
     networks:
       - retailershub
+
     environment:
       SPRING_APPLICATION_NAME: "userservice-application"
       SPRING_CONFIG_IMPORT: "configserver:http://configserver:8092/"
-      SPRING_PROFILES_ACTIVE: default
+      SPRING_PROFILES_ACTIVE: "default"
+
 
   notificationservice:
-    image: "amitcodedocker/notificationservice:NotS2"
+    image: "amitcodedocker/notificationservice:nsdevv2"
     container_name: notification-ms
     ports:
-      - "8088:8088"
-      - "8089:8088"
+      - "8084:8084"
+      - "8085:8084"
+
+    depends_on:
+      configserver:
+        condition: service_healthy
+
     deploy:
       resources:
         limits:
           memory: 700m
+
     networks:
       - retailershub
+
     environment:
       SPRING_APPLICATION_NAME: "notification-application"
       SPRING_CONFIG_IMPORT: "configserver:http://configserver:8092/"
-      SPRING_PROFILES_ACTIVE: default
+      SPRING_PROFILES_ACTIVE: "default"
 
-  configserver:
-    image: "amitcodedocker/configserver:configv1"
-    container_name: authentication-ms
-    ports:
-      - "8092:8092"
-    deploy:
-      resources:
-        limits:
-          memory: 700m
-    networks:
-      - retailershub
-    environment:
-      SPRING_APPLICATION_NAME: "configserver"
-      SPRING_CONFIG_IMPORT: "configserver:http://configserver:8092/"
-      SPRING_PROFILES_ACTIVE: default
+
 networks:
   retailershub:
     driver: "bridge"

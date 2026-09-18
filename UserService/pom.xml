@@ -149,7 +149,7 @@
                         <!--for hardcoded value-->
                         <image>amitcodedocker/userservice:userdevsv2</image>
                         <!--for dynamic value-->
-                        <!--                    <image>amitcodedocker/${project.artifactId}:userdev1</image>-->
+                        <!-- <image>amitcodedocker/${project.artifactId}:userdev1</image>-->
                     </to>
                 </configuration>
             </plugin>
