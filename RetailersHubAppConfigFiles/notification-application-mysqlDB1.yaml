@@ -1,7 +1,7 @@
 spring:
   datasource:
     #url: jdbc:mysql://${DB_HOST:host.docker.internal}:3306/${DB_NAME:NOTIFICATION_SERVICE_DATABASE}
-    url: spring.datasource.url=jdbc:mysql://localhost:3307/notification_services_database
+    url: jdbc:mysql://localhost:3307/notification_services_database
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
