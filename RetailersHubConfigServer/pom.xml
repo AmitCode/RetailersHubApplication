@@ -45,6 +45,10 @@
 			<artifactId>spring-boot-starter-actuator-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+        <dependency>
+            <groupId>org.springframework.retry</groupId>
+            <artifactId>spring-retry</artifactId>
+        </dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
@@ -61,17 +65,44 @@
 	<build>
 		<plugins>
             <!--Plugin for google jin (To generate docker image.)-->
+<!--            <plugin>-->
+<!--                <groupId>com.google.cloud.tools</groupId>-->
+<!--                <artifactId>jib-maven-plugin</artifactId>-->
+<!--                <version>3.5.2</version>-->
+<!--                <configuration>-->
+<!--                    <to>-->
+<!--                        &lt;!&ndash;for hardcoded value&ndash;&gt;-->
+<!--                        <image>amitcodedocker/configservice:configsv1</image>-->
+<!--                        &lt;!&ndash;for dynamic value&ndash;&gt;-->
+<!--                        &lt;!&ndash;<image>amitcodedocker/${project.artifactId}:userdev1</image>&ndash;&gt;-->
+<!--                    </to>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
             <plugin>
                 <groupId>com.google.cloud.tools</groupId>
                 <artifactId>jib-maven-plugin</artifactId>
                 <version>3.5.2</version>
+
                 <configuration>
+
+                    <from>
+                        <image>ubuntu:24.04</image>
+                    </from>
+
                     <to>
-                        <!--for hardcoded value-->
-                        <image>amitcodedocker/configservice:configsv1</image>
-                        <!--for dynamic value-->
-                        <!--<image>amitcodedocker/${project.artifactId}:userdev1</image>-->
+                        <image>amitcodedocker/configservice:configsv2</image>
                     </to>
+
+                    <container>
+                        <mainClass>
+                            com.config.server.RetailersHubConfigServerApplication
+                        </mainClass>
+
+                        <ports>
+                            <port>8092</port>
+                        </ports>
+                    </container>
+
                 </configuration>
             </plugin>
 		</plugins>
