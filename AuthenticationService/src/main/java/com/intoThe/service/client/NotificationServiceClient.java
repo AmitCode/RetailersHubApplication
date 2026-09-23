@@ -1,4 +1,4 @@
-package com.intoThe.client;
+package com.intoThe.service.client;
 
 import com.intoThe.dto.request.EmailRequest;
 import com.intoThe.dto.response.EmailResponse;

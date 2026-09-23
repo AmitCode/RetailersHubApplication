@@ -6,6 +6,7 @@ import com.intoThe.dto.request.PasswordResetRequest;
 import com.intoThe.dto.request.UserRegistrationRequest;
 import com.intoThe.dto.request.UserUpdateRequest;
 import com.intoThe.dto.response.AuthenticationServiceResponse;
+import com.intoThe.dto.response.EmailResponse;
 import com.intoThe.dto.response.EmailServiceResponse;
 import com.intoThe.entities.EntityVerificationToken;
 import com.intoThe.entities.OtpEntity;
@@ -20,6 +21,7 @@ import com.intoThe.repository.OtpRepository;
 import com.intoThe.repository.UserRepository;
 import com.intoThe.service.UserService;
 import com.intoThe.service.WebClientServices;
+import com.intoThe.service.client.NotificationServiceClient;
 import com.intoThe.utils.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
@@ -51,6 +53,7 @@ public class UserServiceImpl implements UserService {
     //private final RestTemplate restTemplate;
     private final UserDataModelMapper userModelMapper = new UserDataModelMapper();
     AuthenticationServiceResponse response;
+    NotificationServiceClient notificationServiceClient;
 
     @Value("${verification.token.expiry.time.unit}")
     private TokenExpirationUnit verificationExpiryTimeUnit;
@@ -63,7 +66,9 @@ public class UserServiceImpl implements UserService {
                            @Qualifier("userServiceWebClient") WebClient userServiceWebClient,
                            EntityVerificationTokenRepository tokenRepository,
                            EntityManager entityManager,
-                           OtpRepository otpRepository) {
+                           OtpRepository otpRepository,
+                           NotificationServiceClient notificationServiceClient) {
+
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.notificationServiceWebClient = webClient;
@@ -71,6 +76,7 @@ public class UserServiceImpl implements UserService {
         this.userServiceWebClient = userServiceWebClient;
         this.entityManager = entityManager;
         this.otpRepository = otpRepository;
+        this.notificationServiceClient = notificationServiceClient;
         //this.restTemplate = restTemplate;
     }
 
@@ -199,8 +205,9 @@ public ResponseEntity<?> addUser(UserRegistrationRequest registrationRequest) {
             tokenRepository.save(verificationToken);
             EmailRequest emailRequest = AuthServiceUtils.prepareEmailRequest(newUser, hashToken, "REG",
                     "Verify Your User Account");
-            ResponseEntity<EmailServiceResponse> responseEntity = WebClientServices
-                    .callEmailNotificationService("email/sendMail", emailRequest, notificationServiceWebClient);
+//            ResponseEntity<EmailServiceResponse> responseEntity = WebClientServices
+//                    .callEmailNotificationService("email/sendMail", emailRequest, notificationServiceWebClient);
+            ResponseEntity<EmailResponse> emailResponseEntity = notificationServiceClient.sendEmail(emailRequest);
 
             response = AuthenticationServiceResponse.createResponse()
                     .setResponseMsg("User created successfully!...")
@@ -222,7 +229,7 @@ public ResponseEntity<?> addUser(UserRegistrationRequest registrationRequest) {
     /**
      * This method is used to update an existing user in the database.
      *
-     * @param userDTO The {@link UserDTO} object containing the details of the user to be updated.
+     * @param updateRequest The {@link UserDTO} object containing the details of the user to be updated.
      * @return The updated {@link UserDTO} object.
      */
     @Transactional
