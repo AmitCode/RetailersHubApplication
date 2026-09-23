@@ -1,5 +1,9 @@
 server:
   port: 8070
+<<<<<<< HEAD
+=======
+
+>>>>>>> bddbd95dda52b46d05be38ea7862743a15631f03
 eureka:
   instance:
     hostname: localhost
