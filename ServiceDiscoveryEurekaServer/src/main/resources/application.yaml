@@ -1,3 +1,19 @@
 spring:
   application:
-    name: ServiceDiscoveryEurekaServer
+    name: service-discovery-eureka
+server:
+  port: 8070
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  health:
+    readiness-state:
+      enable: true
+    liveness-state:
+      enable: true
+    endpoint:
+      health:
+        probes:
+          enable: true
