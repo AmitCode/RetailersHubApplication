@@ -86,11 +86,11 @@
                 <configuration>
 
                     <from>
-                        <image>ubuntu:24.04</image>
+                        <image>eclipse-temurin:24-jre</image>
                     </from>
 
                     <to>
-                        <image>amitcodedocker/configservice:configsv2</image>
+                        <image>amitcodedocker/configservice:configsv3</image>
                     </to>
 
                     <container>

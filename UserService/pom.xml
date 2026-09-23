@@ -148,7 +148,7 @@
                 <configuration>
                     <to>
                         <!--for hardcoded value-->
-                        <image>amitcodedocker/userservice:userdevsv2</image>
+                        <image>amitcodedocker/userservice:userdevsv3</image>
                         <!--for dynamic value-->
                         <!-- <image>amitcodedocker/${project.artifactId}:userdev1</image>-->
                     </to>
