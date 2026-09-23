@@ -27,7 +27,7 @@ public class SecurityConfiguration {
                         auth.requestMatchers("/auth/login", "/auth/register", "/userService/createNewUser",
                                         "/verify/verifyUserAccount", "/userService/forgot-password-request"
                                         ,"/otpService/generateOtp", "/otpService/validateOtp", "/swagger-ui/**",
-                                        "/v3/api-docs/**").permitAll()
+                                        "/v3/api-docs/**", "/actuator/**").permitAll()
                                 .anyRequest().authenticated())
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

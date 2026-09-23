@@ -8,8 +8,29 @@ spring:
   config:
     import: "optional:configserver:http://localhost:8092/"
 
+endpoints:
+  shutdown:
+    enabled: true
+
 management:
   endpoints:
     web:
       exposure:
         include: "*"
+  shutdown:
+    enabled: true
+  env:
+    enabled: true
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:8070/eureka/
+info:
+  app:
+    name: "notification-application"
+    description: "Retailers Hub Application's Notification microservice"
+    version: "1.0.0"

@@ -10,7 +10,7 @@ spring:
       server:
         git:
           uri: "https://github.com/AmitCode/RetailersHubApplication.git"
-          default-label: feature/spring-cloud-config
+          default-label: feature/service-discovery-eureka
           search-paths:
             - RetailersHubAppConfigFiles
           timeout: 5

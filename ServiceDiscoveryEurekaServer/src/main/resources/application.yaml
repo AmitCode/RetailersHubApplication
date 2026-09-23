@@ -1,6 +1,8 @@
 spring:
   application:
     name: service-discovery-eureka
+  config:
+    import: "optional:configserver:http://localhost:8092/"
 server:
   port: 8070
 management:
