@@ -3,7 +3,7 @@ spring:
     name: notification-application
 
   profiles:
-    active: mysqlDB1
+    active: oracleDB
 
   config:
     import: "optional:configserver:http://localhost:8092/"

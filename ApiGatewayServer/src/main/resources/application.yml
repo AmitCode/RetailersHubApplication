@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: apigatewayserver
+
+  config:
+    import: "optional:configserver:http://localhost:8092/"
+  cloud:
+    gateway:
+      server:
+        webflux:
+          discovery:
+            locator:
+              enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  env:
+    enabled: true
+  endpoint:
+    gateway:
+      enabled: true
+info:
+  app:
+    name: "Api Gateway Server"
+    description: "Retailers Hub Application's Api Gateway Server"
+    version: "1.0.0"

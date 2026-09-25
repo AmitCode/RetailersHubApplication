@@ -10,7 +10,7 @@ spring:
       server:
         git:
           uri: "https://github.com/AmitCode/RetailersHubApplication.git"
-          default-label: feature/service-discovery-eureka
+          default-label: feature/api-gateway
           search-paths:
             - RetailersHubAppConfigFiles
           timeout: 5

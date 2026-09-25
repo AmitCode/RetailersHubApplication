@@ -205,7 +205,7 @@
             <!--                <artifactId>spring-boot-maven-plugin</artifactId>-->
             <!--            </plugin>-->
 
-            <!--Plugin for google jin (To generate docker image.)-->
+            <!--Plugin for google jib (To generate docker image.)-->
             <plugin>
                 <groupId>com.google.cloud.tools</groupId>
                 <artifactId>jib-maven-plugin</artifactId>
