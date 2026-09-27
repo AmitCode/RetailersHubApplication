@@ -18,7 +18,8 @@ public class ApiGatewayServerApplication {
         return routeLocatorBuilder.routes()
                 .route(p -> p
                         .path("/auth-application/authService/**")
-                        .filters(f -> f.rewritePath("/auth-application/?(?<remaining>.*)", "/${remaining}"))
+                        .filters(f -> f.rewritePath("/auth-application/?(?<remaining>.*)", "" +
+                                "/${remaining}"))
                         .uri("lb://AUTH-APPLICATION"))
                 .route(p -> p
                         .path("/userservice-application/userService/**")
