@@ -92,14 +92,14 @@ services:
 
     depends_on:
       configserver:
-        condition: service_started
+        condition: service_completed_successfully
 
     healthcheck:
-      test: "curl --fail --silent localhost:8070/actuator/health/readiness | grep UP || exit 1"
+      test: "curl --fail --silent localhost:8071/actuator/health/readiness | grep UP || exit 1"
       interval: 10s
       timeout: 5s
       retries: 10
-      start_period: 30s
+      start_period: 10s
 
     networks:
       - retailershub
@@ -122,11 +122,11 @@ services:
       - "8092:8092"
 
     healthcheck:
-      test: "curl --fail --silent localhost:8092/actuator/health/readiness | grep UP || exit 1"
+      test: "curl --fail --silent localhost:8071/actuator/health/readiness | grep UP || exit 1"
       interval: 10s
       timeout: 5s
       retries: 10
-      start_period: 30s
+      start_period: 10s
 
     networks:
       - retailershub
@@ -136,6 +136,37 @@ services:
         limits:
           memory: 700m
 
+  # ============================================================
+  # Api Gateway Server
+  # ============================================================
+  apigatewayserver:
+    image: "amitcodedocker/apigatewayserver:apigsv1"
+    container_name: apigatewayserver-ms
+
+    ports:
+      - "8072:8072"
+
+    depends_on:
+      authenticationservice:
+        condition: service_completed_successfully
+      userservice:
+        condition: service_completed_successfully
+      notificationservice:
+        condition: service_completed_successfully
+      
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+
+    networks:
+      - retailershub
+
+    environment:
+      SPRING_APPLICATION_NAME: "apigatewayserver"
+      SPRING_CONFIG_IMPORT: configserver:http://configserver:8092/
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/
+      SPRING_PROFILES_ACTIVE: default
 
   # ============================================================
   # AUTHENTICATION SERVICE
@@ -147,13 +178,20 @@ services:
     ports:
       - "8089:8089"
 
+    healthcheck:
+      test: "curl --fail --silent localhost:8089/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
     depends_on:
       auth_servicedb:
-        condition: service_healthy
+        condition: service_completed_successfully
       configserver:
-        condition: service_started
+        condition: service_completed_successfully
       eurekaserver:
-        condition: service_started
+        condition: service_completed_successfully
 
     deploy:
       resources:
@@ -180,13 +218,20 @@ services:
     ports:
       - "8088:8088"
 
+    healthcheck:
+      test: "curl --fail --silent localhost:8088/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
     depends_on:
       user_servicedb:
-        condition: service_healthy
+        condition: service_completed_successfully
       configserver:
-        condition: service_started
+        condition: service_completed_successfully
       eurekaserver:
-        condition: service_started
+        condition: service_completed_successfully
 
     deploy:
       resources:
@@ -213,13 +258,20 @@ services:
     ports:
       - "8090:8090"
 
+    healthcheck:
+      test: "curl --fail --silent localhost:8090/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
     depends_on:
       notification_servicedb:
-        condition: service_healthy
+        condition: service_completed_successfully
       configserver:
-        condition: service_started
+        condition: service_completed_successfully
       eurekaserver:
-        condition: service_started
+        condition: service_completed_successfully
 
     deploy:
       resources:

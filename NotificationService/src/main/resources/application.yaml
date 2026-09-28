@@ -11,16 +11,25 @@ spring:
 endpoints:
   shutdown:
     enabled: true
+  health:
+    probes:
+      enable: true
 
 management:
   endpoints:
     web:
       exposure:
         include: "*"
+  health:
+    readiness-state:
+      enable: true
+    liveness-state:
+      enable: true
   shutdown:
     enabled: true
   env:
     enabled: true
+
 eureka:
   instance:
     preferIpAddress: true
