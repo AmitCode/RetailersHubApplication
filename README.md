@@ -1,142 +1,275 @@
 # 🛒 RetailersHub
 
-**RetailersHub** is a scalable, modular e-commerce platform built using a **microservices architecture** with Java and Spring Boot.
+**RetailersHub** is a scalable, modular e-commerce platform built using **Java, Spring Boot, and Microservices architecture**.
 
-The platform is designed to simulate a real-world retail ecosystem where customers can browse products, place orders, manage accounts, and receive notifications, while administrators and retailers can manage products, users, orders, and other business operations.
+The project is being developed as a real-world backend system covering authentication, user management, product management, notifications, centralized configuration, API routing, containerization, and service-to-service communication.
 
-The project follows a distributed architecture with independently deployable services, RESTful APIs, centralized authentication, role-based authorization, asynchronous communication, and containerized infrastructure.
+The architecture is designed around independently deployable services, RESTful APIs, centralized configuration, JWT-based security, containerized deployment, and clear service boundaries.
 
 ---
 
 ## 📌 Project Status
 
-🚧 **Currently under active development**
+🚧 **Actively under development**
 
-The project is being developed incrementally, starting with core authentication, user management, and notification capabilities and expanding toward a complete retail microservices ecosystem.
+### Current development focus
+
+- Authentication and JWT-based security
+- User management
+- Product service
+- Notification service
+- Spring Cloud Config Server / Config Client
+- Centralized configuration using Git-backed configuration
+- Spring Cloud API Gateway
+- Docker containerization
+- Docker Compose for multi-service local environments
+- Google Jib for container image creation
+- Service-to-service communication using REST/WebClient
+
+### Future development
+
+- Service discovery
+- Kafka-based event-driven communication
+- Redis caching
+- Distributed tracing
+- Monitoring and observability
+- CI/CD automation
+- Additional business services such as orders, payments, retailer management, and role/permission management
 
 ---
 
 # 🏗️ Architecture
 
-RetailersHub follows a **microservices-based architecture**, where each business capability is implemented as an independent service.
+RetailersHub follows a **microservices-based architecture** in which individual business capabilities are separated into independently deployable services.
+
+The current architecture is centered around an API Gateway, centralized configuration, authentication, user/product/notification services, and independently managed databases.
 
 ```text
-                         ┌──────────────────────┐
-                         │       Client         │
-                         │ Web / Mobile / API   │
-                         └──────────┬───────────┘
-                                    │
-                                    ▼
-                         ┌──────────────────────┐
-                         │     API Gateway      │
-                         └──────────┬───────────┘
-                                    │
-             ┌──────────────────────┼──────────────────────┐
-             │                      │                      │
-             ▼                      ▼                      ▼
-    ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-    │ Authentication  │    │   User Service  │    │ Product Service │
-    │    Service      │    │                 │    │                 │
-    └────────┬────────┘    └────────┬────────┘    └────────┬────────┘
-             │                      │                      │
-             ▼                      ▼                      ▼
-       ┌──────────┐           ┌──────────┐           ┌──────────┐
-       │ Database │           │ Database │           │ Database │
-       └──────────┘           └──────────┘           └──────────┘
+                              ┌──────────────────────┐
+                              │       Client         │
+                              │ Web / Mobile / API   │
+                              └──────────┬───────────┘
+                                         │
+                                         ▼
+                              ┌──────────────────────┐
+                              │     API Gateway      │
+                              │  Spring Cloud GW     │
+                              └──────────┬───────────┘
+                                         │
+                ┌────────────────────────┼────────────────────────┐
+                │                        │                        │
+                ▼                        ▼                        ▼
+       ┌─────────────────┐      ┌─────────────────┐      ┌─────────────────┐
+       │ Authentication  │      │   User Service  │      │ Product Service │
+       │    Service      │      │                 │      │                 │
+       └────────┬────────┘      └────────┬────────┘      └────────┬────────┘
+                │                        │                        │
+                ▼                        ▼                        ▼
+       ┌─────────────────┐      ┌─────────────────┐      ┌─────────────────┐
+       │ Auth Database   │      │  User Database  │      │ Product Database│
+       └─────────────────┘      └─────────────────┘      └─────────────────┘
 
-                                    │
-                                    ▼
-                           ┌──────────────────┐
-                           │   Message Broker │
-                           │      Kafka       │
-                           └────────┬─────────┘
-                                    │
-                       ┌────────────┴────────────┐
-                       ▼                         ▼
-              ┌─────────────────┐       ┌─────────────────┐
-              │ Notification    │       │ Other Consumer  │
-              │ Service         │       │ Services        │
-              └─────────────────┘       └─────────────────┘
+                │
+                │ REST / WebClient
+                ▼
+       ┌─────────────────────┐
+       │ Notification Service│
+       └──────────┬──────────┘
+                  │
+                  ▼
+             Email / OTP
+
+                  ▲
+                  │
+       ┌──────────┴──────────┐
+       │   Config Client     │
+       │ Authentication/User │
+       │ Product/Notification│
+       └──────────▲──────────┘
+                  │
+                  │ Centralized Configuration
+                  │
+       ┌──────────┴──────────┐
+       │   Config Server     │
+       │ Spring Cloud Config │
+       └──────────┬──────────┘
+                  │
+                  ▼
+             Git Repository
+       Centralized Config Files
+```
+
+> **Note:** Kafka, Redis, service discovery, and additional business services are part of the target architecture but are not represented as currently implemented components unless explicitly listed in the project status below.
+
+---
+
+# 📦 Microservices & Infrastructure Components
+
+| Component | Responsibility | Status |
+|---|---|---|
+| **AuthenticationService** | Registration, login, JWT authentication and authentication workflows | ✅ Implemented / Active Development |
+| **UserService** | User creation and user-related operations | ✅ Implemented / Active Development |
+| **ProductService** | Product catalog and product management | 🚧 Active Development |
+| **NotificationService** | Email/notification-related operations | 🚧 Active Development |
+| **RetailersHubConfigServer** | Centralized external configuration for microservices | ✅ Implemented |
+| **ApiGateway** | Centralized routing and entry point for microservices | 🚧 Active Development |
+| **ServiceRegistry** | Service discovery and registration | 📋 Planned |
+| **RolePermissionService** | Roles and permission management | 📋 Planned |
+| **RetailerService** | Retailer/vendor management | 📋 Planned |
+| **OrderService** | Order creation and lifecycle management | 📋 Planned |
+| **PaymentService** | Payment and transaction management | 📋 Planned |
+| **Kafka** | Event-driven asynchronous communication | 📋 Planned |
+| **Redis** | Distributed caching and low-latency data access | 📋 Planned |
+
+---
+
+# ⚙️ Centralized Configuration
+
+RetailersHub now includes a dedicated **Spring Cloud Config Server** for centralized configuration management.
+
+```text
+                 ┌─────────────────────────┐
+                 │     Git Repository      │
+                 │  Centralized Config     │
+                 └────────────┬────────────┘
+                              │
+                              ▼
+                 ┌─────────────────────────┐
+                 │      Config Server      │
+                 │  Spring Cloud Config   │
+                 └────────────┬────────────┘
+                              │
+             ┌────────────────┼────────────────┐
+             │                │                │
+             ▼                ▼                ▼
+       Authentication     User Service    Product Service
+          Service
+             │
+             ▼
+       Notification Service
+```
+
+### Configuration approach
+
+- Spring Cloud Config Server
+- Spring Cloud Config Client
+- Git-backed configuration
+- Centralized application properties
+- Environment-specific configuration
+- Configuration separated from application code
+- Services retrieve configuration from the Config Server during startup
+
+This reduces configuration duplication and provides a centralized mechanism for managing service configuration.
+
+### Current configuration flow
+
+```text
+Microservice
+     │
+     │ Config Client
+     ▼
+Config Server
+     │
+     ▼
+Git Repository
+     │
+     ▼
+Application-specific configuration
 ```
 
 ---
 
-# 📦 Microservices
+# 🌐 API Gateway
 
-| Service                   | Responsibility                                                 | Status            |
-| ------------------------- | -------------------------------------------------------------- | ----------------- |
-| **AuthenticationService** | Authentication, login, registration, JWT, account verification | 🚧 In Development |
-| **UserService**           | User management and user-related operations                    | 🚧 In Development |
-| **NotificationService**   | Notifications and communication with users                     | 🚧 In Development |
-| **ProductService**        | Product catalog and product management                         | 📋 Planned        |
-| **RetailerService**       | Retailer/vendor management                                     | 📋 Planned        |
-| **OrderService**          | Order creation, processing and lifecycle management            | 📋 Planned        |
-| **PaymentService**        | Payment processing and transaction management                  | 📋 Planned        |
-| **RolePermissionService** | Role-based access control and permission management            | 📋 Planned        |
-| **ApiGateway**            | Centralized API routing and request handling                   | 📋 Planned        |
-| **ServiceRegistry**       | Service discovery and registration                             | 📋 Planned        |
+RetailersHub is being integrated with **Spring Cloud Gateway** to provide a centralized entry point for client requests.
+
+```text
+Client
+   │
+   ▼
+API Gateway
+   │
+   ├──────────────► AuthenticationService
+   │
+   ├──────────────► UserService
+   │
+   ├──────────────► ProductService
+   │
+   └──────────────► NotificationService
+```
+
+The Gateway is intended to provide:
+
+- Centralized request routing
+- Service abstraction from clients
+- Common request filtering
+- Authentication/security integration
+- Centralized cross-cutting concerns
+- A single entry point for external clients
+
+> Gateway implementation is currently under active development.
 
 ---
 
 # 🔐 Authentication & Authorization
 
-Authentication is handled independently from the core business services.
+Authentication is handled through a dedicated **AuthenticationService**.
 
-The authentication layer is responsible for:
+Current authentication responsibilities include:
 
-* User registration
-* User login
-* JWT-based authentication
-* Password management
-* Account verification
-* OTP-based verification
-* Forgot-password workflow
-* Secure API access
-* Authentication-related validations
+- User registration
+- User login
+- JWT generation
+- JWT validation
+- Password handling
+- Account verification workflows
+- OTP-related verification
+- Forgot-password workflow
+- Authentication-related validation
+- Secure access to protected APIs
 
-### Planned Authorization Model
-
-RetailersHub will implement **Role-Based Access Control (RBAC)**.
-
-Example roles:
+### JWT flow
 
 ```text
-SUPER_ADMIN
-ADMIN
-RETAILER
-PRODUCT_MANAGER
-ORDER_MANAGER
-CUSTOMER
+                 ┌──────────────┐
+                 │    Client    │
+                 └──────┬───────┘
+                        │
+                  Login Request
+                        │
+                        ▼
+             ┌────────────────────┐
+             │ Authentication     │
+             │ Service            │
+             └─────────┬──────────┘
+                       │
+                 Validate User
+                       │
+                       ▼
+                ┌──────────────┐
+                │   Database   │
+                └──────┬───────┘
+                       │
+                  User Valid
+                       │
+                       ▼
+                 Generate JWT
+                       │
+                       ▼
+                     Client
 ```
 
-Permissions will define what operations each role can perform.
+Subsequent protected requests use:
 
-Example:
-
-```text
-USER_CREATE
-USER_READ
-USER_UPDATE
-USER_DELETE
-
-PRODUCT_CREATE
-PRODUCT_READ
-PRODUCT_UPDATE
-PRODUCT_DELETE
-
-ORDER_CREATE
-ORDER_READ
-ORDER_UPDATE
-ORDER_CANCEL
+```http
+Authorization: Bearer <JWT>
 ```
-
-This allows authorization to be managed independently from authentication.
 
 ---
 
 # 👥 Core User Types
 
-The platform is designed around multiple real-world actors.
+RetailersHub is designed around multiple actors in the retail ecosystem.
 
 ### Super Admin
 
@@ -144,11 +277,11 @@ Responsible for overall platform administration.
 
 Typical responsibilities:
 
-* Manage administrators
-* Manage platform configuration
-* Manage roles and permissions
-* Monitor system activity
-* Manage retailers
+- Manage administrators
+- Manage platform configuration
+- Manage roles and permissions
+- Monitor system activity
+- Manage retailers
 
 ### Admin
 
@@ -156,23 +289,23 @@ Responsible for operational management.
 
 Typical responsibilities:
 
-* Manage users
-* Manage products
-* Manage retailers
-* Manage orders
-* View operational dashboards
+- Manage users
+- Manage products
+- Manage retailers
+- Manage orders
+- View operational information
 
 ### Retailer
 
-Responsible for managing products and retail operations.
+Responsible for retail operations.
 
 Typical responsibilities:
 
-* Manage products
-* Update inventory
-* View orders
-* Manage pricing
-* Monitor sales
+- Manage products
+- Update inventory
+- View orders
+- Manage pricing
+- Monitor sales
 
 ### Product Manager
 
@@ -180,11 +313,11 @@ Responsible for product catalog operations.
 
 Typical responsibilities:
 
-* Create products
-* Update products
-* Manage categories
-* Manage inventory
-* Update product information
+- Create products
+- Update products
+- Manage categories
+- Manage inventory
+- Update product information
 
 ### Order Manager
 
@@ -192,11 +325,11 @@ Responsible for order processing.
 
 Typical responsibilities:
 
-* View orders
-* Process orders
-* Update order status
-* Handle cancellations
-* Manage fulfillment workflow
+- View orders
+- Process orders
+- Update order status
+- Handle cancellations
+- Manage fulfillment workflows
 
 ### Customer
 
@@ -204,13 +337,13 @@ The end user of the retail platform.
 
 Typical responsibilities:
 
-* Register/login
-* Browse products
-* Search products
-* Place orders
-* Track orders
-* Manage profile
-* Receive notifications
+- Register/login
+- Browse products
+- Search products
+- Place orders
+- Track orders
+- Manage profile
+- Receive notifications
 
 ---
 
@@ -218,70 +351,66 @@ Typical responsibilities:
 
 ## Backend
 
-* **Java**
-* **Spring Boot**
-* **Spring Security**
-* **Spring Cloud**
-* **Spring Data JPA**
-* **Hibernate**
-* **REST APIs**
-* **Maven**
+- **Java**
+- **Spring Boot**
+- **Spring Security**
+- **Spring Cloud**
+- **Spring Data JPA**
+- **Hibernate**
+- **REST APIs**
+- **Maven**
+- **WebClient**
 
 ## Security
 
-* JWT
-* Spring Security
-* Role-Based Access Control
-* Password hashing
-* OTP verification
+- JWT
+- Spring Security
+- Password hashing
+- Role-based authorization
+- Input validation
 
 ## Databases
 
-* MySQL
-* Oracle
-* PostgreSQL
+- MySQL
+- Oracle
+- PostgreSQL
 
-The project is designed to support different persistence technologies where required by individual services.
+The project follows a service-owned data approach, where individual services are responsible for their own persistence.
 
-## Messaging
+## Configuration
 
-* Apache Kafka
+- Spring Cloud Config Server
+- Spring Cloud Config Client
+- Git-backed configuration
+- Environment-specific properties
 
-Kafka will be used for asynchronous, event-driven communication between services.
+## Containerization
 
-Example:
+- Docker
+- Docker Compose
+- Dockerfile
+- Google Jib
+- Containerized Spring Boot services
 
-```text
-Order Created
-     │
-     ▼
- Kafka Topic
-     │
-     ├──────────────► Notification Service
-     │
-     ├──────────────► Payment Service
-     │
-     └──────────────► Inventory Service
-```
+## Version Control
 
-## Caching
+- Git
+- GitHub
 
-* Redis
+## Planned Infrastructure
 
-Redis will be used for caching and other low-latency data access requirements.
-
-## Infrastructure
-
-* Docker
-* Docker Compose
-* Git
-* GitHub
+- Apache Kafka
+- Redis
+- Service Discovery
+- Distributed tracing
+- Prometheus
+- Grafana
 
 ---
 
 # 📁 Repository Structure
 
-RetailersHub is maintained as a **monorepo**, allowing all microservices and supporting infrastructure to be managed from a single GitHub repository.
+RetailersHub is maintained as a **monorepo**, allowing the microservices and supporting components to be managed from a single GitHub repository.
 
 ```text
 RetailersHubApplication/
@@ -301,145 +430,94 @@ RetailersHubApplication/
 │       ├── main/
 │       └── test/
 │
+├── ProductService/
+│   ├── pom.xml
+│   └── src/
+│
 ├── NotificationService/
 │   ├── pom.xml
 │   └── src/
-│       ├── main/
-│       └── test/
 │
-├── ProductService/
-│
-├── RetailerService/
-│
-├── OrderService/
-│
-├── PaymentService/
-│
-├── RolePermissionService/
+├── RetailersHubConfigServer/
+│   ├── pom.xml
+│   └── src/
 │
 ├── ApiGateway/
-│
-├── ServiceRegistry/
+│   └── src/
 │
 └── infrastructure/
     ├── docker/
-    ├── kafka/
-    ├── redis/
-    └── database/
+    ├── docker-compose.yml
+    └── configuration/
 ```
+
+> The exact directory structure may evolve as additional microservices are introduced.
 
 ---
 
-# 🔄 Communication Between Services
+# 🔄 Service-to-Service Communication
 
-RetailersHub uses two communication patterns.
-
-## Synchronous Communication
-
-REST APIs are used when an immediate response is required.
+The current implementation uses **synchronous REST-based communication**, including Spring WebClient where service-to-service calls are required.
 
 Example:
+
+```text
+AuthenticationService
+        │
+        │ WebClient / REST
+        ▼
+   UserService
+        │
+        │ WebClient / REST
+        ▼
+NotificationService
+```
+
+Example request flow:
 
 ```text
 Client
   │
   ▼
-API Gateway
+AuthenticationService
+  │
+  ├── Create/validate authentication data
   │
   ▼
-User Service
+UserService
+  │
+  └── User operation
   │
   ▼
-Response
+NotificationService
+  │
+  └── Send notification
 ```
 
-## Asynchronous Communication
+### Future asynchronous communication
 
-Apache Kafka will be used for event-driven communication.
-
-Example:
+Apache Kafka is planned for event-driven workflows such as:
 
 ```text
-Order Service
+Order Created
      │
-     │ OrderCreated Event
      ▼
    Kafka
      │
-     ├───────────────┐
-     ▼               ▼
-Notification     Payment
-Service           Service
+     ├──────────────► Notification Service
+     │
+     ├──────────────► Payment Service
+     │
+     └──────────────► Inventory Service
 ```
 
-This reduces coupling between services and allows consumers to process events independently.
-
----
-
-# 🔑 Authentication Flow
-
-The authentication flow is designed around JWT-based security.
-
-```text
-                ┌──────────────┐
-                │    Client    │
-                └──────┬───────┘
-                       │
-                 Login Request
-                       │
-                       ▼
-              ┌──────────────────┐
-              │ Authentication   │
-              │ Service          │
-              └────────┬─────────┘
-                       │
-                 Validate User
-                       │
-                       ▼
-                ┌──────────────┐
-                │   Database   │
-                └──────┬───────┘
-                       │
-                 User Valid
-                       │
-                       ▼
-                Generate JWT
-                       │
-                       ▼
-                    Client
-```
-
-Subsequent requests contain the JWT:
-
-```text
-Authorization: Bearer <JWT>
-```
-
-The token is validated before protected resources are accessed.
-
----
-
-# 🔒 Security Principles
-
-The project follows common backend security practices:
-
-* Stateless authentication
-* JWT-based authorization
-* Password hashing
-* Role-based access control
-* Permission-based authorization
-* Protected REST endpoints
-* Environment-based configuration
-* Secrets excluded from source control
-* Input validation
-* Exception handling
-* Secure service-to-service communication
+Kafka is therefore treated as a **planned event-driven communication layer**, not the current primary communication mechanism.
 
 ---
 
 # 🗄️ Database Strategy
 
-Each microservice is designed to own its data.
+RetailersHub follows the **database-per-service** principle.
 
 ```text
 AuthenticationService ──► Authentication DB
@@ -455,61 +533,104 @@ PaymentService ─────────► Payment DB
 
 Services should communicate through APIs or events rather than directly accessing another service's database.
 
-This maintains service boundaries and reduces coupling.
+Benefits include:
+
+- Service isolation
+- Reduced coupling
+- Independent schema evolution
+- Independent scaling
+- Clear ownership of business data
 
 ---
 
 # 📡 API Design
 
-The services expose RESTful APIs.
+Services expose RESTful APIs.
 
-Example Authentication APIs:
+### Authentication APIs
 
-```text
+```http
 POST /auth/register
 POST /auth/login
 POST /auth/forgot-password-request
 POST /auth/reset-password
 ```
 
-Example User APIs:
+### User APIs
 
-```text
+```http
 POST   /userService/createNewUser
 GET    /userService/{id}
 PUT    /userService/{id}
 DELETE /userService/{id}
 ```
 
-API documentation will be provided using OpenAPI/Swagger.
+API documentation is intended to be provided through **OpenAPI/Swagger**.
+
+Typical endpoints:
+
+```text
+/swagger-ui/index.html
+/v3/api-docs
+```
 
 ---
 
-# 🐳 Docker
+# 🐳 Docker & Containerization
 
-The services are intended to be containerized using Docker.
+RetailersHub services are being containerized for consistent local and deployment environments.
 
-Example:
+The project uses:
+
+- Docker
+- Dockerfiles
+- Docker Compose
+- Google Jib
+- Containerized Spring Boot applications
+
+### Jib
+
+Google Jib is used to build container images directly from Maven without requiring a traditional Dockerfile-based image build for every service.
+
+Example workflow:
 
 ```text
-                    Docker Host
-                         │
-       ┌─────────────────┼─────────────────┐
-       │                 │                 │
-       ▼                 ▼                 ▼
- Authentication      User Service    Notification
-   Container           Container       Container
-       │                 │                 │
-       └─────────────────┼─────────────────┘
-                         │
-                  Infrastructure
-                         │
-             ┌───────────┼───────────┐
-             ▼           ▼           ▼
-          MySQL        Redis       Kafka
+Maven Build
+    │
+    ▼
+Google Jib
+    │
+    ▼
+Container Image
+    │
+    ▼
+Docker Registry
 ```
 
-Docker Compose will be used to simplify local development and infrastructure setup.
+Example image naming convention:
+
+```text
+amitcodedocker/<service-name>:<version>
+```
+
+### Docker Compose
+
+Docker Compose is used to orchestrate multiple services and supporting infrastructure locally.
+
+```text
+                    Docker Compose
+                          │
+        ┌─────────────────┼─────────────────┐
+        │                 │                 │
+        ▼                 ▼                 ▼
+ Authentication       User Service     Notification
+   Service              Service          Service
+        │                 │                 │
+        └─────────────────┼─────────────────┘
+                          │
+                          ▼
+                    Config Server
+```
 
 ---
 
@@ -517,19 +638,19 @@ Docker Compose will be used to simplify local development and infrastructure set
 
 ## Prerequisites
 
-Make sure the following are installed:
+Install the following:
 
-* Java
-* Maven
-* Git
-* Docker
-* Docker Compose
-* MySQL / PostgreSQL depending on the service
-* IntelliJ IDEA or another Java IDE
+- Java
+- Maven
+- Git
+- Docker
+- Docker Compose
+- MySQL / PostgreSQL as required by the service
+- IntelliJ IDEA or another Java IDE
 
 ---
 
-# 🚀 Running a Service
+# 🚀 Running a Service Locally
 
 Navigate to the required service:
 
@@ -549,19 +670,37 @@ Run the application:
 mvn spring-boot:run
 ```
 
-The same approach can be used for the other services.
+The same approach can be used for other Spring Boot services.
 
 ---
 
 # 🐳 Running With Docker
 
-Once Docker configuration is available:
+Build and start the multi-service environment:
 
 ```bash
 docker compose up --build
 ```
 
-To stop the containers:
+To run in detached mode:
+
+```bash
+docker compose up -d --build
+```
+
+To view running containers:
+
+```bash
+docker ps
+```
+
+To view service logs:
+
+```bash
+docker compose logs -f
+```
+
+To stop the environment:
 
 ```bash
 docker compose down
@@ -569,18 +708,41 @@ docker compose down
 
 ---
 
+# 🔧 Configuration in Docker
+
+When services run inside Docker Compose, service-to-service communication must use the Docker Compose service names rather than `localhost`.
+
+Example:
+
+```text
+AuthenticationService
+        │
+        │
+        ▼
+http://configserver:8092
+        │
+        ▼
+Config Server
+```
+
+This allows containers to communicate through the Docker Compose network.
+
+For local execution outside Docker, the corresponding local host configuration can be used.
+
+---
+
 # 🧪 Testing
 
-The project uses automated tests to validate service functionality.
+The project is being developed with automated testing in mind.
 
-Testing includes:
+Testing areas include:
 
-* Unit testing
-* Controller testing
-* Service-layer testing
-* Repository testing
-* Integration testing
-* Security testing
+- Unit testing
+- Controller testing
+- Service-layer testing
+- Repository testing
+- Integration testing
+- Security testing
 
 Run tests using:
 
@@ -590,77 +752,60 @@ mvn test
 
 ---
 
-# 📚 API Documentation
+# 🔒 Security Principles
 
-API documentation will be available through Swagger/OpenAPI.
+The project follows common backend security practices:
 
-Typical endpoints:
-
-```text
-/swagger-ui/index.html
-/v3/api-docs
-```
-
----
-
-# 📈 Planned Features
-
-The platform will gradually include:
-
-* [x] Authentication Service
-* [x] User Service
-* [x] Notification Service
-* [ ] Role & Permission Management
-* [ ] Product Service
-* [ ] Retailer Service
-* [ ] Order Service
-* [ ] Payment Service
-* [ ] API Gateway
-* [ ] Service Discovery
-* [ ] Kafka-based event processing
-* [ ] Redis caching
-* [ ] Docker Compose environment
-* [ ] Centralized configuration
-* [ ] Distributed tracing
-* [ ] Monitoring and observability
-* [ ] CI/CD pipeline
-* [ ] Automated integration tests
+- Stateless authentication
+- JWT-based authentication
+- Password hashing
+- Protected REST endpoints
+- Role-based authorization
+- Input validation
+- Exception handling
+- Environment-based configuration
+- Secrets excluded from source control
+- Secure service-to-service communication
 
 ---
 
-# 🎯 Engineering Goals
+# 📈 Development Roadmap
 
-The primary engineering goals of RetailersHub are:
+| Feature | Status |
+|---|---|
+| Authentication Service | ✅ Implemented / Active Development |
+| User Service | ✅ Implemented / Active Development |
+| Notification Service | 🚧 Active Development |
+| Product Service | 🚧 Active Development |
+| Spring Cloud Config Server | ✅ Implemented |
+| Centralized Git-backed Configuration | ✅ Implemented |
+| Docker Containerization | ✅ Implemented / Active Development |
+| Google Jib | ✅ Implemented |
+| Docker Compose | 🚧 Active Development |
+| API Gateway | 🚧 Active Development |
+| Role & Permission Management | 📋 Planned |
+| Retailer Service | 📋 Planned |
+| Order Service | 📋 Planned |
+| Payment Service | 📋 Planned |
+| Service Discovery / Eureka | 📋 Planned |
+| Kafka Event Processing | 📋 Planned |
+| Redis Caching | 📋 Planned |
+| Distributed Tracing | 📋 Planned |
+| Monitoring & Observability | 📋 Planned |
+| CI/CD Pipeline | 📋 Planned |
+| Automated Integration Tests | 🚧 In Progress |
 
-### Scalability
+Legend:
 
-Services can be independently scaled based on workload.
-
-### Maintainability
-
-Business capabilities are separated into independently maintainable services.
-
-### Loose Coupling
-
-Services communicate through well-defined REST APIs and asynchronous events.
-
-### Security
-
-Authentication and authorization are implemented using Spring Security and JWT.
-
-### Resilience
-
-The architecture is designed to isolate failures between services.
-
-### Observability
-
-Future iterations will introduce centralized logging, metrics, tracing, and monitoring.
+- ✅ Implemented
+- 🚧 Active Development / In Progress
+- 📋 Planned
 
 ---
 
-# 📊 Future Observability Stack
+# 📊 Future Observability
 
-The project is planned to integrate:
+The project is planned to introduce centralized observability.
 
 ```text
 Application Services
@@ -668,30 +813,30 @@ Application Services
         ├── Logs
         ├── Metrics
         └── Traces
-              │
-              ▼
-       Observability Layer
-              │
-        ┌─────┼─────┐
-        ▼     ▼     ▼
-      Logs Metrics Traces
+                │
+                ▼
+       Observability Platform
+                │
+        ┌───────┼────────┐
+        ▼       ▼        ▼
+      Logs    Metrics   Traces
 ```
 
-Potential technologies include:
+Potential technologies:
 
-* Spring Boot Actuator
-* Micrometer
-* Prometheus
-* Grafana
-* Distributed tracing
+- Spring Boot Actuator
+- Micrometer
+- Prometheus
+- Grafana
+- Distributed tracing
 
 ---
 
 # 🔄 CI/CD
 
-A CI/CD pipeline is planned using GitHub Actions.
+CI/CD automation is planned using GitHub Actions.
 
-The pipeline will eventually perform:
+Target pipeline:
 
 ```text
 Git Push
@@ -709,49 +854,84 @@ Integration Tests
 Static Analysis
    │
    ▼
-Docker Build
+Docker/Jib Image Build
    │
    ▼
-Deploy
+Image Registry
+   │
+   ▼
+Deployment
 ```
+
+The project can also be integrated with static code analysis and quality gates as the CI/CD pipeline evolves.
 
 ---
 
 # 🧠 Key Concepts Demonstrated
 
-This project is intended to demonstrate practical knowledge of:
+RetailersHub is being developed to demonstrate practical backend and distributed-system concepts including:
 
-* Java
-* Object-Oriented Programming
-* Collections
-* Exception Handling
-* Multithreading
-* Spring Boot
-* Spring Security
-* JWT
-* REST APIs
-* Microservices
-* Spring Cloud
-* API Gateway
-* Service Discovery
-* JPA/Hibernate
-* Database Design
-* SQL
-* Kafka
-* Redis
-* Docker
-* Distributed Systems
-* Event-Driven Architecture
-* Role-Based Access Control
-* Unit Testing
-* Integration Testing
-* CI/CD
+### Java
+
+- Object-Oriented Programming
+- Collections Framework
+- Exception Handling
+- Java Streams
+- Multithreading
+- Modern Java features
+
+### Spring
+
+- Spring Boot
+- Spring Core
+- Spring Security
+- Spring Data JPA
+- Hibernate
+- REST APIs
+- WebClient
+- Spring Cloud
+
+### Microservices
+
+- Service decomposition
+- API Gateway
+- Centralized configuration
+- Service-to-service communication
+- Database-per-service
+- Distributed systems concepts
+- Event-driven architecture
+
+### Security
+
+- JWT
+- Authentication
+- Authorization
+- Role-based access control
+- Password security
+
+### DevOps / Infrastructure
+
+- Git
+- GitHub
+- Docker
+- Docker Compose
+- Google Jib
+- CI/CD
+- Containerized deployment
+
+### Planned Distributed Infrastructure
+
+- Eureka / Service Discovery
+- Kafka
+- Redis
+- Distributed tracing
+- Monitoring and observability
 
 ---
 
 # 📌 Why a Monorepo?
 
-RetailersHub uses a monorepo structure so that the complete application can be explored from a single repository.
+RetailersHub uses a monorepo structure so the complete application can be explored from a single repository.
 
 ```text
 One Repository
@@ -759,15 +939,49 @@ One Repository
       ├── Authentication
       ├── Users
       ├── Products
+      ├── Notifications
+      ├── Config Server
+      ├── API Gateway
       ├── Retailers
       ├── Orders
-      ├── Payments
-      └── Notifications
+      └── Payments
 ```
 
-Each service remains independently structured and deployable while the entire system can be versioned and reviewed together.
+Each service remains independently structured and deployable while the overall system can be versioned and reviewed together.
 
-This also makes the project easier to share as a portfolio project.
+This also makes the project easier to develop, test, demonstrate, and share as a portfolio project.
+
+---
+
+# 🎯 Engineering Goals
+
+### Scalability
+
+Services can be independently scaled based on workload.
+
+### Maintainability
+
+Business capabilities are separated into independently maintainable services.
+
+### Loose Coupling
+
+Services communicate through well-defined APIs and, in future iterations, asynchronous events.
+
+### Security
+
+Authentication and authorization are implemented using Spring Security and JWT.
+
+### Configuration Management
+
+Application configuration is centralized using Spring Cloud Config and Git-backed configuration.
+
+### Resilience
+
+The architecture is being designed to isolate failures between services and introduce resilience patterns as the system evolves.
+
+### Observability
+
+Future iterations will introduce centralized logging, metrics, tracing, and monitoring.
 
 ---
 
@@ -777,15 +991,16 @@ This also makes the project easier to share as a portfolio project.
 
 Backend Software Engineer
 
-Primary interests:
+### Primary Interests
 
-* Java
-* Spring Boot
-* Microservices
-* Distributed Systems
-* Backend Architecture
-* REST APIs
-* Database Design
+- Java
+- Spring Boot
+- Microservices
+- Distributed Systems
+- Backend Architecture
+- REST APIs
+- Database Design
+- Cloud & DevOps
 
 ---
 
@@ -794,4 +1009,5 @@ Primary interests:
 If you find this project useful or interesting, consider giving the repository a ⭐.
 
 **Repository:**
+
 https://github.com/AmitCode/RetailersHubApplication
