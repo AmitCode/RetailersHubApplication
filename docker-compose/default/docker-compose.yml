@@ -1,101 +1,83 @@
 services:
 
   # ============================================================
-  # AUTH DATABASE
-  # Host:3306 -> Container:3306
-  # Other containers should use auth_servicedb:3306
+  # AUTH SERVICE DATABASE
   # ============================================================
   auth_servicedb:
     container_name: auth_servicedb
-    image: mysql
-
+    image: mysql:latest
     ports:
       - "3306:3306"
-
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      timeout: 10s
-      retries: 10
-      interval: 10s
-      start_period: 10s
-
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: authentication_services_database
-
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+      start_period: 20s
     networks:
       - retailershub
 
 
   # ============================================================
-  # USER DATABASE
-  # Host:3307 -> Container:3306
-  # Other containers should use user_servicedb:3306
+  # USER SERVICE DATABASE
   # ============================================================
   user_servicedb:
     container_name: user_servicedb
-    image: mysql
-
+    image: mysql:latest
     ports:
       - "3307:3306"
-
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      timeout: 10s
-      retries: 10
-      interval: 10s
-      start_period: 10s
-
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: user_services_database
-
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+      start_period: 20s
     networks:
       - retailershub
 
 
   # ============================================================
-  # NOTIFICATION DATABASE
-  # Host:3308 -> Container:3306
-  # Other containers should use notification_servicedb:3306
+  # NOTIFICATION SERVICE DATABASE
   # ============================================================
   notification_servicedb:
     container_name: notification_servicedb
-    image: mysql
-
+    image: mysql:latest
     ports:
       - "3308:3306"
-
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      timeout: 10s
-      retries: 10
-      interval: 10s
-      start_period: 10s
-
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: notification_services_database
-
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+      start_period: 20s
     networks:
       - retailershub
 
-  # ============================================================
-  # EUREKA SERVER
-  # ============================================================
-  eurekaserver:
-    image: "amitcodedocker/servicediscoveryeureka:eurekav1"
-    container_name: eurekaserver-ms
 
+  # ============================================================
+  # SPRING CLOUD CONFIG SERVER
+  # ============================================================
+  configserver:
+    image: "amitcodedocker/configservice:configsv3"
+    container_name: configserver
     ports:
-      - "8070:8070"
-
-    depends_on:
-      configserver:
-        condition: service_started
+      - "8092:8092"
 
     healthcheck:
-      test: "curl --fail --silent localhost:8070/actuator/health/readiness | grep UP || exit 1"
+      test:
+        [
+          "CMD-SHELL",
+          "wget -qO- http://localhost:8092/actuator/health/readiness || exit 1"
+        ]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -103,33 +85,32 @@ services:
 
     networks:
       - retailershub
-    environment:
-      SPRING_APPLICATION_NAME: "service-discovery-eureka"
 
     deploy:
       resources:
         limits:
           memory: 700m
 
-  # ============================================================
-  # CONFIG SERVER
-  # ============================================================
-  configserver:
-    image: "amitcodedocker/configservice:configsv3"
-    container_name: configserver
 
+  # ============================================================
+  # EUREKA SERVICE DISCOVERY
+  # ============================================================
+  eurekaserver:
+    image: "amitcodedocker/servicediscoveryeureka:eurekav1"
+    container_name: eurekaserver-ms
     ports:
-      - "8092:8092"
+      - "8070:8070"
 
-    healthcheck:
-      test: "curl --fail --silent localhost:8092/actuator/health/readiness | grep UP || exit 1"
-      interval: 10s
-      timeout: 5s
-      retries: 10
-      start_period: 30s
+    depends_on:
+      configserver:
+        condition: service_healthy
 
     networks:
       - retailershub
+
+    environment:
+      SPRING_APPLICATION_NAME: "service-discovery-eureka"
+      SPRING_CONFIG_IMPORT: "configserver:http://configserver:8092/"
 
     deploy:
       resources:
@@ -143,31 +124,32 @@ services:
   authenticationservice:
     image: "amitcodedocker/authenticationservice:authsv3"
     container_name: authentication-ms
-
     ports:
       - "8089:8089"
 
     depends_on:
       auth_servicedb:
         condition: service_healthy
+
       configserver:
-        condition: service_started
+        condition: service_healthy
+
       eurekaserver:
         condition: service_started
-
-    deploy:
-      resources:
-        limits:
-          memory: 700m
 
     networks:
       - retailershub
 
     environment:
       SPRING_APPLICATION_NAME: "auth-application"
-      SPRING_CONFIG_IMPORT: configserver:http://configserver:8092/
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/
-      SPRING_PROFILES_ACTIVE: myNewDB
+      SPRING_CONFIG_IMPORT: "configserver:http://configserver:8092/"
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: "http://eurekaserver:8070/eureka/"
+      SPRING_PROFILES_ACTIVE: "myNewDB"
+
+    deploy:
+      resources:
+        limits:
+          memory: 700m
 
 
   # ============================================================
@@ -176,31 +158,32 @@ services:
   userservice:
     image: "amitcodedocker/userservice:userdevsv3"
     container_name: user-ms
-
     ports:
       - "8088:8088"
 
     depends_on:
       user_servicedb:
         condition: service_healthy
+
       configserver:
-        condition: service_started
+        condition: service_healthy
+
       eurekaserver:
         condition: service_started
-
-    deploy:
-      resources:
-        limits:
-          memory: 700m
 
     networks:
       - retailershub
 
     environment:
       SPRING_APPLICATION_NAME: "userservice-application"
-      SPRING_CONFIG_IMPORT: configserver:http://configserver:8092/
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/
-      SPRING_PROFILES_ACTIVE: mysqlDB1
+      SPRING_CONFIG_IMPORT: "configserver:http://configserver:8092/"
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: "http://eurekaserver:8070/eureka/"
+      SPRING_PROFILES_ACTIVE: "mysqlDB1"
+
+    deploy:
+      resources:
+        limits:
+          memory: 700m
 
 
   # ============================================================
@@ -209,31 +192,32 @@ services:
   notificationservice:
     image: "amitcodedocker/notificationservice:nsdevv3"
     container_name: notification-ms
-
     ports:
       - "8090:8090"
 
     depends_on:
       notification_servicedb:
         condition: service_healthy
+
       configserver:
-        condition: service_started
+        condition: service_healthy
+
       eurekaserver:
         condition: service_started
-
-    deploy:
-      resources:
-        limits:
-          memory: 700m
 
     networks:
       - retailershub
 
     environment:
       SPRING_APPLICATION_NAME: "notification-application"
-      SPRING_CONFIG_IMPORT: configserver:http://configserver:8092/
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/
-      SPRING_PROFILES_ACTIVE: mysqlDB1
+      SPRING_CONFIG_IMPORT: "configserver:http://configserver:8092/"
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: "http://eurekaserver:8070/eureka/"
+      SPRING_PROFILES_ACTIVE: "mysqlDB1"
+
+    deploy:
+      resources:
+        limits:
+          memory: 700m
 
 
 # ==============================================================
