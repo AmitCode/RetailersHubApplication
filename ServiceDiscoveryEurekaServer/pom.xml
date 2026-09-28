@@ -74,12 +74,21 @@
                 <artifactId>jib-maven-plugin</artifactId>
                 <version>3.5.2</version>
                 <configuration>
+                    <from>
+                        <image>eclipse-temurin:24-jre</image>
+                    </from>
                     <to>
-                        <!--for hardcoded value-->
-                        <image>amitcodedocker/servicediscoveryeureka:eurekav1</image>
-                        <!--for dynamic value-->
-                        <!--<image>amitcodedocker/${project.artifactId}:userdev1</image>-->
+                        <image>amitcodedocker/servicediscoveryeureka:eurekav2</image>
                     </to>
+                    <container>
+                        <mainClass>
+                            com.service.discovery.ServiceDiscoveryEurekaServerApplication
+                        </mainClass>
+                        <ports>
+                            <port>8070</port>
+                        </ports>
+                    </container>
+
                 </configuration>
             </plugin>
 		</plugins>

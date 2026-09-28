@@ -140,18 +140,37 @@
 <!--				</configuration>-->
 <!--			</plugin>-->
 
-            <!--Plugin for google jin (To generate docker image.)-->
+<!--            &lt;!&ndash;Plugin for google jin (To generate docker image.)&ndash;&gt;-->
+<!--            <plugin>-->
+<!--                <groupId>com.google.cloud.tools</groupId>-->
+<!--                <artifactId>jib-maven-plugin</artifactId>-->
+<!--                <version>3.5.2</version>-->
+<!--                <configuration>-->
+<!--                    <to>-->
+<!--                        &lt;!&ndash;for hardcoded value&ndash;&gt;-->
+<!--                        <image>amitcodedocker/userservice:userdevsv4</image>-->
+<!--                        &lt;!&ndash;for dynamic value&ndash;&gt;-->
+<!--                        &lt;!&ndash; <image>amitcodedocker/${project.artifactId}:userdev1</image>&ndash;&gt;-->
+<!--                    </to>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
+
             <plugin>
                 <groupId>com.google.cloud.tools</groupId>
                 <artifactId>jib-maven-plugin</artifactId>
                 <version>3.5.2</version>
                 <configuration>
+                    <from>
+                        <image>eclipse-temurin:24-jre</image>
+                    </from>
                     <to>
-                        <!--for hardcoded value-->
-                        <image>amitcodedocker/userservice:userdevsv4</image>
-                        <!--for dynamic value-->
-                        <!-- <image>amitcodedocker/${project.artifactId}:userdev1</image>-->
+                        <image>amitcodedocker/userservice:userdevsv5</image>
                     </to>
+                    <container>
+                        <ports>
+                            <port>8088</port>
+                        </ports>
+                    </container>
                 </configuration>
             </plugin>
 
