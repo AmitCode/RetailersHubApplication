@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient("notification-application")
+@FeignClient(name = "notification-application", fallback = NotificationFallback.class)
 public interface NotificationServiceClient {
 
     @PostMapping(value = "email/sendMail", consumes = "application/json")

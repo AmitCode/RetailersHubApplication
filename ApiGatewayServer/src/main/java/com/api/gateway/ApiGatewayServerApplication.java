@@ -22,7 +22,9 @@ public class ApiGatewayServerApplication {
                         .path("/auth-application/authService/**")
                         .filters(f -> f.rewritePath("/auth-application/?(?<remaining>.*)", "" +
                                 "/${remaining}")
-                                .addRequestHeader("X-Response-Time", LocalDateTime.now().toString()))
+                                .addRequestHeader("X-Response-Time", LocalDateTime.now().toString())
+                                .circuitBreaker(config -> config.setName("authApplicationCircuitBreaker")
+                                        .setFallbackUri("forward:/contactSupport")))
                         .uri("lb://AUTH-APPLICATION"))
                 .route(p -> p
                         .path("/userservice-application/userService/**")
