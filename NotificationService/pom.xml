@@ -203,7 +203,11 @@
                         <image>eclipse-temurin:24-jre</image>
                     </from>
                     <to>
+<<<<<<< HEAD
                         <image>amitcodedocker/notificationservice:nsdevv5</image>
+=======
+                        <image>amitcodedocker/notificationservice:nsdevv3</image>
+>>>>>>> b5830ecf1aeca96f8a4ed78df3cff5577f002764
                     </to>
                     <container>
                         <ports>
