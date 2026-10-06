@@ -27,6 +27,8 @@ management:
     web:
       exposure:
         include: "*"
+  tags:
+    application: ${spring:application:name}
   env:
     enabled: true
   endpoint:

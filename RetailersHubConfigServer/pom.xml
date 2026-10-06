@@ -49,6 +49,12 @@
             <groupId>org.springframework.retry</groupId>
             <artifactId>spring-retry</artifactId>
         </dependency>
+
+        <!--Grafana Dependency-->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
@@ -90,7 +96,7 @@
                     </from>
 
                     <to>
-                        <image>amitcodedocker/configservice:configsv3</image>
+                        <image>amitcodedocker/configservice:configsv4</image>
                     </to>
 
                     <container>

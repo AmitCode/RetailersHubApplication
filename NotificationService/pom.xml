@@ -115,6 +115,12 @@
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
 
+        <!--Grafana Dependency-->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+
     </dependencies>
 
     <!--Spring Cloud Client dependency for config management using spring cloud.-->
@@ -203,11 +209,7 @@
                         <image>eclipse-temurin:24-jre</image>
                     </from>
                     <to>
-<<<<<<< HEAD
-                        <image>amitcodedocker/notificationservice:nsdevv5</image>
-=======
-                        <image>amitcodedocker/notificationservice:nsdevv3</image>
->>>>>>> b5830ecf1aeca96f8a4ed78df3cff5577f002764
+                        <image>amitcodedocker/notificationservice:nsdevv6</image>
                     </to>
                     <container>
                         <ports>

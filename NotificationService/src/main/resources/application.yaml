@@ -15,7 +15,10 @@ endpoints:
     probes:
       enable: true
 
+
 management:
+  tags:
+    application: ${spring:application:name}
   endpoints:
     web:
       exposure:

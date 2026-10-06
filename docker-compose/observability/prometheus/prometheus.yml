@@ -1,0 +1,73 @@
+global:
+  scrape_interval: 5s
+  evaluation_interval: 5s
+
+scrape_configs:
+
+  # ============================================================
+  # PROMETHEUS
+  # ============================================================
+  - job_name: 'prometheus'
+    static_configs:
+      - targets:
+          - 'prometheus:9090'
+
+
+  # ============================================================
+  # SPRING CLOUD CONFIG SERVER
+  # ============================================================
+  - job_name: 'configserver'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets:
+          - 'configserver:8092'
+
+
+  # ============================================================
+  # EUREKA SERVICE DISCOVERY
+  # ============================================================
+  - job_name: 'eurekaserver'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets:
+          - 'eurekaserver:8070'
+
+
+  # ============================================================
+  # AUTHENTICATION SERVICE
+  # ============================================================
+  - job_name: 'authenticationservice'
+    metrics_path: '/authService/actuator/prometheus'
+    static_configs:
+      - targets:
+          - 'authenticationservice:8089'
+
+
+  # ============================================================
+  # USER SERVICE
+  # ============================================================
+  - job_name: 'userservice'
+    metrics_path: '/userService/actuator/prometheus'
+    static_configs:
+      - targets:
+          - 'userservice:8088'
+
+
+  # ============================================================
+  # NOTIFICATION SERVICE
+  # ============================================================
+  - job_name: 'notificationservice'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets:
+          - 'notificationservice:8090'
+
+
+  # ============================================================
+  # API GATEWAY
+  # ============================================================
+  - job_name: 'apigatewayserver'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets:
+          - 'apigatewayserver:8072'

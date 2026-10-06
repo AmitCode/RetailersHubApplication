@@ -83,6 +83,11 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-circuitbreaker-reactor-resilience4j</artifactId>
         </dependency>
+        <!--Grafana Dependency-->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
@@ -111,7 +116,7 @@
                 <configuration>
                     <to>
                         <!--for hardcoded value-->
-                        <image>amitcodedocker/apigatewayserver:apigsv1</image>
+                        <image>amitcodedocker/apigatewayserver:apigsv2</image>
                         <!--for dynamic value-->
                         <!--<image>amitcodedocker/${project.artifactId}:userdev1</image>-->
                     </to>

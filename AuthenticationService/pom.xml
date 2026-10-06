@@ -174,6 +174,12 @@
             <artifactId>spring-cloud-starter-circuitbreaker-resilience4j</artifactId>
         </dependency>
 
+        <!--Grafana Dependency-->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+
     </dependencies>
 
     <!--Spring Cloud Client dependency for config management using spring cloud.-->
@@ -235,11 +241,7 @@
                         <image>eclipse-temurin:24-jre</image>
                     </from>
                     <to>
-<<<<<<< HEAD
-                        <image>amitcodedocker/authenticationservice:authsv5</image>
-=======
-                        <image>amitcodedocker/authenticationservice:authsv3</image>
->>>>>>> b5830ecf1aeca96f8a4ed78df3cff5577f002764
+                        <image>amitcodedocker/authenticationservice:authsv6</image>
                     </to>
                     <container>
                         <ports>
