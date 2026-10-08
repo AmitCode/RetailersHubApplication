@@ -29,6 +29,7 @@
 	<properties>
 		<java.version>24</java.version>
 		<spring-cloud.version>2025.1.3</spring-cloud.version>
+        <otelVersion>2.22.0</otelVersion><!--Open telemetry dependency for distributed tracing-->
 	</properties>
 	<dependencies>
 		<dependency>
@@ -55,6 +56,14 @@
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
         </dependency>
+
+        <!--Open telemetry dependency for distributed tracing-->
+        <dependency>
+            <groupId>io.opentelemetry.javaagent</groupId>
+            <artifactId>opentelemetry-javaagent</artifactId>
+            <version>${otelVersion}</version>
+            <scope>runtime</scope>
+        </dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
@@ -79,7 +88,7 @@
                         <image>eclipse-temurin:24-jre</image>
                     </from>
                     <to>
-                        <image>amitcodedocker/servicediscoveryeureka:eurekav3</image>
+                        <image>amitcodedocker/servicediscoveryeureka:eurekav4</image>
                     </to>
                     <container>
                         <mainClass>

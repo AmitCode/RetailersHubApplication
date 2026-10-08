@@ -46,3 +46,10 @@ info:
     name: "notification-application"
     description: "Retailers Hub Application's Notification microservice"
     version: "1.0.0"
+
+#OpenTelemetry properties
+logging:
+  pattern:
+    level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"
+  level:
+    root: DEBUG

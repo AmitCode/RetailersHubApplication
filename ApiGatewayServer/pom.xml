@@ -29,6 +29,7 @@
 	<properties>
 		<java.version>24</java.version>
 		<spring-cloud.version>2025.1.3</spring-cloud.version>
+        <otelVersion>2.22.0</otelVersion><!--Open telemetry dependency for distributed tracing-->
 	</properties>
 	<dependencies>
         <!-- Spring Boot Actuator -->
@@ -88,6 +89,14 @@
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
         </dependency>
+
+        <!--Open telemetry dependency for distributed tracing-->
+        <dependency>
+            <groupId>io.opentelemetry.javaagent</groupId>
+            <artifactId>opentelemetry-javaagent</artifactId>
+            <version>${otelVersion}</version>
+            <scope>runtime</scope>
+        </dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
@@ -116,7 +125,7 @@
                 <configuration>
                     <to>
                         <!--for hardcoded value-->
-                        <image>amitcodedocker/apigatewayserver:apigsv2</image>
+                        <image>amitcodedocker/apigatewayserver:apigsv3</image>
                         <!--for dynamic value-->
                         <!--<image>amitcodedocker/${project.artifactId}:userdev1</image>-->
                     </to>

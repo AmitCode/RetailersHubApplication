@@ -31,6 +31,7 @@
 		<java.version>24</java.version>
         <!--Spring Cloud Client dependency for config management using spring cloud.-->
         <spring-cloud.version>2025.1.3</spring-cloud.version>
+        <otelVersion>2.22.0</otelVersion><!--Open telemetry dependency for distributed tracing-->
 	</properties>
 	<dependencies>
 		<dependency>
@@ -121,6 +122,14 @@
             <artifactId>micrometer-registry-prometheus</artifactId>
         </dependency>
 
+        <!--Open telemetry dependency for distributed tracing-->
+        <dependency>
+            <groupId>io.opentelemetry.javaagent</groupId>
+            <artifactId>opentelemetry-javaagent</artifactId>
+            <version>${otelVersion}</version>
+            <scope>runtime</scope>
+        </dependency>
+
     </dependencies>
 
     <!--Spring Cloud Client dependency for config management using spring cloud.-->
@@ -209,7 +218,7 @@
                         <image>eclipse-temurin:24-jre</image>
                     </from>
                     <to>
-                        <image>amitcodedocker/notificationservice:nsdevv6</image>
+                        <image>amitcodedocker/notificationservice:nsdevv7</image>
                     </to>
                     <container>
                         <ports>
