@@ -97,6 +97,19 @@
             <version>${otelVersion}</version>
             <scope>runtime</scope>
         </dependency>
+        <!--Dependencies related to OAUTH2 and Spring Security-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security-oauth2-resource-server</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-jose</artifactId>
+        </dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
@@ -125,7 +138,7 @@
                 <configuration>
                     <to>
                         <!--for hardcoded value-->
-                        <image>amitcodedocker/apigatewayserver:apigsv3</image>
+                        <image>amitcodedocker/apigatewayserver:apigsv4</image>
                         <!--for dynamic value-->
                         <!--<image>amitcodedocker/${project.artifactId}:userdev1</image>-->
                     </to>
