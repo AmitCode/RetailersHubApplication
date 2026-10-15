@@ -1,5 +1,6 @@
 package com.intoThe.service.impl;
 
+import com.intoThe.dto.AuthenticationSMessageDto;
 import com.intoThe.dto.UserDTO;
 import com.intoThe.dto.request.EmailRequest;
 import com.intoThe.dto.request.PasswordResetRequest;
@@ -28,6 +29,7 @@ import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -54,6 +56,7 @@ public class UserServiceImpl implements UserService {
     private final UserDataModelMapper userModelMapper = new UserDataModelMapper();
     AuthenticationServiceResponse response;
     NotificationServiceClient notificationServiceClient;
+    private StreamBridge streamBridge;
 
     @Value("${verification.token.expiry.time.unit}")
     private TokenExpirationUnit verificationExpiryTimeUnit;
@@ -67,7 +70,8 @@ public class UserServiceImpl implements UserService {
                            EntityVerificationTokenRepository tokenRepository,
                            EntityManager entityManager,
                            OtpRepository otpRepository,
-                           NotificationServiceClient notificationServiceClient) {
+                           NotificationServiceClient notificationServiceClient,
+                           StreamBridge streamBridge) {
 
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -78,6 +82,7 @@ public class UserServiceImpl implements UserService {
         this.otpRepository = otpRepository;
         this.notificationServiceClient = notificationServiceClient;
         //this.restTemplate = restTemplate;
+        this.streamBridge = streamBridge;
     }
 
     /**
@@ -213,6 +218,7 @@ public ResponseEntity<?> addUser(UserRegistrationRequest registrationRequest) {
                     .setResponseMsg("User created successfully!...")
                     .setIsOprSuccess(true)
                     .setStatusCode(HttpStatus.CREATED.toString());
+            sendCommunication(registrationRequest);
 
         } catch (DataIntegrityViolationException ex) {
             throw new UserNameAlreadyExist("User with this user name already exist!...");
@@ -474,5 +480,28 @@ public ResponseEntity<?> addUser(UserRegistrationRequest registrationRequest) {
             throw new InternalServerErrorException("[Exception occurred while password change]- " +
                     "{Ex}:- " + exception.getMessage());
         }
+    }
+
+    private void sendCommunication(UserRegistrationRequest registrationRequest) {
+        var authenticationSMessageDto = new AuthenticationSMessageDto(registrationRequest.getUserName(),
+                registrationRequest.getUserEmail(), registrationRequest.getUserPassword());
+        System.out.println("Sending Communication request for the details: {}"
+                + authenticationSMessageDto.toString());
+        var result = streamBridge.send("sendCommunication-out-0", authenticationSMessageDto);
+        System.out.println("Is the Communication request successfully triggered ? : {}"+ result);
+    }
+
+    @Override
+    public boolean updateCommunicationStatus(String userName) {
+        boolean isUpdated = false;
+        if(userName !=null ){
+            Users users = userRepository.findByUserName(userName).orElseThrow(
+                    () -> new ResourceNotFoundException("User not found with userName: " + userName)
+            );
+            users.setIsUserActive(true);
+            userRepository.save(users);
+            isUpdated = true;
+        }
+        return  isUpdated;
     }
 }

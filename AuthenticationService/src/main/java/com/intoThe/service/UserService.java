@@ -20,4 +20,5 @@ public interface UserService {
     public ResponseEntity<AuthenticationServiceResponse> passwordReset(PasswordResetRequest passwordResetRequest);
     public ResponseEntity<AuthenticationServiceResponse> forgotPasswordRequest(String userEmailId);
     public ResponseEntity<?> forgetPassword(String token, String newPassword);
+    boolean updateCommunicationStatus(String userName)
 }
