@@ -22,11 +22,11 @@ spring:
       port: 6379
       timeout: 2s
 
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          jwk-set-uri: "http://localhost:7080/realms/master/protocol/openid-connect/certs"
+#  security:
+#    oauth2:
+#      resourceserver:
+#        jwt:
+#          jwk-set-uri: "http://localhost:7080/realms/master/protocol/openid-connect/certs"
 
 management:
   endpoints:
@@ -58,6 +58,6 @@ resilience4j.circuitbreaker:
 #OpenTelemetry properties
 logging:
   pattern:
-    level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"
-  level:
-    root: DEBUG
+    console: "${CONSOLE_LOG_PATTERN:%green(%d{HH:mm:ss.SSS}) %blue(%-5level) %red([%thread]) %yellow(%logger{15}) - %cyan(%msg%n)}"
+#  level:
+#    root: DEBUG

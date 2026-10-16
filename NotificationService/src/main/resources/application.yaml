@@ -50,6 +50,4 @@ info:
 #OpenTelemetry properties
 logging:
   pattern:
-    level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"
-  level:
-    root: DEBUG
+    console: "${CONSOLE_LOG_PATTERN:%green(%d{HH:mm:ss.SSS}) %blue(%-5level) %red([%thread]) %yellow(%logger{15}) - %cyan(%msg%n)}"
