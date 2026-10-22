@@ -10,7 +10,7 @@ spring:
       server:
         git:
           uri: "https://github.com/AmitCode/RetailersHubApplication.git"
-          default-label: feature/api-gateway-resilience
+          default-label: feature/container-orchestration-u-kubernetes
           search-paths:
             - RetailersHubAppConfigFiles
           timeout: 5

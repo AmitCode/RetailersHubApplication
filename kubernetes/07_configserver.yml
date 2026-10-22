@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: configserver-deployment
+  namespace: retailershub
+  labels:
+    app: configserver
+    app.kubernetes.io/name: configserver
+    app.kubernetes.io/part-of: retailershub
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: configserver
+  template:
+    metadata:
+      labels:
+        app: configserver
+        app.kubernetes.io/name: configserver
+        app.kubernetes.io/part-of: retailershub
+    spec:
+      containers:
+      - name: configserver
+        image: amitcodedocker/configservice:configsv5
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8092
+        env:
+        - name: MANAGEMENT_OPENTELEMETRY_TRACING_EXPORT_OTLP_ENDPOINT
+          valueFrom:
+            configMapKeyRef:
+              name: retailershub-configmap
+              key: OTLP_TRACES_ENDPOINT
+        - name: MANAGEMENT_OPENTELEMETRY_LOGGING_EXPORT_OTLP_ENDPOINT
+          valueFrom:
+            configMapKeyRef:
+              name: retailershub-configmap
+              key: OTLP_LOGS_ENDPOINT
+        - name: MANAGEMENT_OTLP_METRICS_EXPORT_URL
+          valueFrom:
+            configMapKeyRef:
+              name: retailershub-configmap
+              key: OTLP_METRICS_ENDPOINT
+        resources:
+          requests:
+            cpu: 250m
+            memory: 384Mi
+          limits:
+            cpu: 500m
+            memory: 700Mi
+        startupProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8092
+          failureThreshold: 30
+          periodSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8092
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8092
+          periodSeconds: 15
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: configserver
+  namespace: retailershub
+  labels:
+    app: configserver
+    app.kubernetes.io/name: configserver
+    app.kubernetes.io/part-of: retailershub
+spec:
+  selector:
+    app: configserver
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 8092
+      targetPort: 8092
